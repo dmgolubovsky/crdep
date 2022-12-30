@@ -1,1 +1,1 @@
-# crdep
+# Chrome Remote Desktop Endpoint (crdep)
