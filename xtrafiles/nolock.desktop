@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Description=Disable lock screen
+Name=Disable lock screen
+Exec=/usr/bin/nolock.sh

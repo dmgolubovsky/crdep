@@ -1,0 +1,29 @@
+#! /bin/sh
+
+# Create a squashfs copy of the current root filesystem. It is important not to squash itself.
+
+# Prepare the mountpoint for the future overlaid root.
+# newroot will also be used for the temporary squash
+
+mkdir -p /newroot
+mount -t tmpfs none /newroot
+
+# Bind-mount the root filesystem in tmp
+
+mkdir -p /tmp/rk
+mount --bind --make-private -o ro / /tmp/rk
+
+# Go where we run mksquashfs and run it
+
+cd /tmp
+mksquashfs rk /newroot/root.squashfs
+
+# Release the mount
+
+umount /tmp/rk
+
+# Move the resulting image up top and name it per the endpoint name
+
+mv /newroot/root.squashfs /`hostname`-root.squashfs
+
+

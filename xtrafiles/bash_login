@@ -1,0 +1,27 @@
+# Root bash login script: set console size per host terminal window size
+# They are passed to the kernel as cons.cols and cons.lines
+# If not passed they are considered 80 columns and 25 lines.
+
+ccols=`cat /proc/cmdline | sed -e 's/^.*cons.cols=//' -e 's/ .*$//'`
+clines=`cat /proc/cmdline | sed -e 's/^.*cons.lines=//' -e 's/ .*$//'`
+
+# Resize the console
+
+stty cols ${ccols:-80} rows ${clines:-25}
+
+# Retrieve the user name for this endpoint
+
+crdu=`cat /proc/cmdline | sed -e 's/^.*crdep.user=//' -e 's/ .*$//'`
+
+crduser=${crdu:-crdep_user}
+
+export crduser
+
+# If the user does not exist then the endpoint has not been authorized and needs to be
+
+if ! getent passwd $crduser >/dev/null ; then
+
+  crd-auth
+
+fi
+

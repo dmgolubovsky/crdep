@@ -1,0 +1,39 @@
+# /bin/sh
+
+# Remount the squashed root with an overlay tmpfs to provide writable layer
+
+# Mount the proc filesystem
+
+mount -t proc proc /proc
+
+# Load the overlay fs driver
+
+/sbin/modprobe overlayfs
+/sbin/modprobe squashfs
+
+# Create the writable tmpfs under newroot
+
+mount -t tmpfs none /newroot
+
+# Prepare the mountpoints
+
+mkdir -p /newroot/u /newroot/w /newroot/m
+
+# Mount the overlay
+
+mount -t overlay overlay -o lowerdir=/,upperdir=/newroot/u,workdir=/newroot/w /newroot/m
+
+# Provide copies of the necessary filesystems
+
+mount --bind /proc /newroot/m/proc
+mount --bind /dev  /newroot/m/dev
+
+# Change to the new root location
+
+cd /newroot/m
+
+# Jump to systemd and normal boot
+
+exec chroot . /bin/systemd
+
+

@@ -1,0 +1,19 @@
+#! /bin/bash
+
+# Authorize the CRD Endpoint
+
+rm -f /tmp/authcode.sh
+
+echo Creating user "$crduser"
+
+adduser --disabled-login --disabled-password --gecos "" --quiet $crduser 
+usermod -G adm $crduser
+
+dialog --title "Chrome Remote Desktop Endpoint Authorization" --inputbox \
+ "Go to https://remotedesktop.google.com/headless\nClick Begin->Next->Authorize\nPaste the Debian Linux code below\nPress Enter\nEnter PIN"  \
+ 10 `tput cols` --stderr 2>/tmp/authcode.sh && {
+    echo "" "--user-name=$crduser" >> /tmp/authcode.sh
+    sh /tmp/authcode.sh
+} || echo "Endpoint authorization was not performed"
+
+
