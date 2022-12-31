@@ -1,0 +1,1312 @@
+#! /bin/bash
+
+# crdep: create and manage VM images for Chrome Remote Desktop EndPoints
+# pre-script
+
+# The crdep script is distributed as a SHAR self-unpacking archive. A user is expected to place it in any
+# location in their $PATH. When downloaded first it looks in the current user's home directory for a subdirectory 
+# named .crdep and, if such subdirectory does not exist, creates it and extracts the SHAR'ed files there. 
+# If such subdirectory exists it looks for a shell script located in $HOME/.crdep/scripts/crdep-main.sh and executes it
+# for any further action. Therefore, to reinstall the whole tool, just the $HOME/.crdep subdrectory has to be removed,
+# and the script re-downloaded.
+
+# Look if the target script exists and if not, unshar itself there.
+
+export CRDEPDIR="$HOME/.crdep" 
+
+[ -x "$CRDEPDIR/scripts/crdep-main.sh" ] && {
+  "$CRDEPDIR/scripts/crdep-main.sh" "$@"
+} || {
+  mkdir -p "$CRDEPDIR"
+  cd "$CRDEPDIR"
+
+# shar contents goes here and the closing bracket added by Makefile #
+
+
+#!/bin/sh
+# This is a shell archive (produced by GNU sharutils 4.15.2).
+# To extract the files from this archive, save it to some FILE, remove
+# everything before the '#!/bin/sh' line above, then type 'sh FILE'.
+#
+lock_dir=_sh2139484
+# Made on 2022-12-31 13:58 EST by <golubovsky@optiplex>.
+# Source directory was '/home/golubovsky/src/crdep'.
+#
+# Existing files will *not* be overwritten, unless '-c' is specified.
+#
+# This shar contains:
+# length mode       name
+# ------ ---------- ------------------------------------------
+#   3530 -rw-rw-r-- docker/crdep-base.Dockerfile
+#  84687 -rw-rw-r-- kernel/linux-5.15.85-config
+#     95 -rwxrwxr-x scripts/crdep-main.sh
+#     14 -rwxrwxr-x scripts/crdep-main.sh~
+#    369 -rw-rw-r-- xtrafiles/45-allow-colord.pkla
+#    711 -rw-rw-r-- xtrafiles/bash_login
+#    599 -rwxrwxr-x xtrafiles/crd-auth
+#     98 -rw-rw-r-- xtrafiles/fsmod.conf
+#    190 -rw-r--r-- xtrafiles/hosts
+#    861 -rw-rw-r-- xtrafiles/init.c
+#    559 -rw-rw-r-- xtrafiles/issue
+#     47 -rw-rw-r-- xtrafiles/jl.conf
+#    114 -rw-rw-r-- xtrafiles/nolock.desktop
+#    353 -rwxrwxr-x xtrafiles/nolock.sh
+#   2961 -rw-rw-r-- xtrafiles/org.freedesktop.timedate1.policy
+#    708 -rwxrwxr-x xtrafiles/overlay
+#    615 -rwxrwxr-x xtrafiles/squash
+#
+MD5SUM=${MD5SUM-md5sum}
+f=`${MD5SUM} --version | egrep '^md5sum .*(core|text)utils'`
+test -n "${f}" && md5check=true || md5check=false
+${md5check} || \
+  echo 'Note: not verifying md5sums.  Consider installing GNU coreutils.'
+if test "X$1" = "X-c"
+then keep_file=''
+else keep_file=true
+fi
+echo=echo
+save_IFS="${IFS}"
+IFS="${IFS}:"
+gettext_dir=
+locale_dir=
+set_echo=false
+
+for dir in $PATH
+do
+  if test -f $dir/gettext \
+     && ($dir/gettext --version >/dev/null 2>&1)
+  then
+    case `$dir/gettext --version 2>&1 | sed 1q` in
+      *GNU*) gettext_dir=$dir
+      set_echo=true
+      break ;;
+    esac
+  fi
+done
+
+if ${set_echo}
+then
+  set_echo=false
+  for dir in $PATH
+  do
+    if test -f $dir/shar \
+       && ($dir/shar --print-text-domain-dir >/dev/null 2>&1)
+    then
+      locale_dir=`$dir/shar --print-text-domain-dir`
+      set_echo=true
+      break
+    fi
+  done
+
+  if ${set_echo}
+  then
+    TEXTDOMAINDIR=$locale_dir
+    export TEXTDOMAINDIR
+    TEXTDOMAIN=sharutils
+    export TEXTDOMAIN
+    echo="$gettext_dir/gettext -s"
+  fi
+fi
+IFS="$save_IFS"
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null
+then if (echo -n test; echo 1,2,3) | grep n >/dev/null
+     then shar_n= shar_c='
+'
+     else shar_n=-n shar_c= ; fi
+else shar_n= shar_c='\c' ; fi
+f=shar-touch.$$
+st1=200112312359.59
+st2=123123592001.59
+st2tr=123123592001.5 # old SysV 14-char limit
+st3=1231235901
+
+if   touch -am -t ${st1} ${f} >/dev/null 2>&1 && \
+     test ! -f ${st1} && test -f ${f}; then
+  shar_touch='touch -am -t $1$2$3$4$5$6.$7 "$8"'
+
+elif touch -am ${st2} ${f} >/dev/null 2>&1 && \
+     test ! -f ${st2} && test ! -f ${st2tr} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$1$2.$7 "$8"'
+
+elif touch -am ${st3} ${f} >/dev/null 2>&1 && \
+     test ! -f ${st3} && test -f ${f}; then
+  shar_touch='touch -am $3$4$5$6$2 "$8"'
+
+else
+  shar_touch=:
+  echo
+  ${echo} 'WARNING: not restoring timestamps.  Consider getting and
+installing GNU '\''touch'\'', distributed in GNU coreutils...'
+  echo
+fi
+rm -f ${st1} ${st2} ${st2tr} ${st3} ${f}
+#
+if test ! -d ${lock_dir} ; then :
+else ${echo} "lock directory ${lock_dir} exists"
+     exit 1
+fi
+if mkdir ${lock_dir}
+then ${echo} "x - created lock directory ${lock_dir}."
+else ${echo} "x - failed to create lock directory ${lock_dir}."
+     exit 1
+fi
+# ============= docker/crdep-base.Dockerfile ==============
+if test ! -d 'docker'; then
+  mkdir 'docker'
+if test $? -eq 0
+then ${echo} "x - created directory docker."
+else ${echo} "x - failed to create directory docker."
+     exit 1
+fi
+fi
+if test -n "${keep_file}" && test -f 'docker/crdep-base.Dockerfile'
+then
+${echo} "x - SKIPPING docker/crdep-base.Dockerfile (file already exists)"
+
+else
+${echo} "x - extracting docker/crdep-base.Dockerfile xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`W)!,!=`#,<BB)OJKK&U216`S!A
+MT$_F*U06ZA5H6B:Z/X,$"T)=5>>3U]8!@A4G=$S);#=`(#U,(TVY%"\_[>*F
+M&._)JP>Y#P]4ZQ1OFQX$2+-6+%\+G7)%3H":Q+D::1<VFU5ZCQ?*$!(%J[BO
+M65FO26,5.P6S'*YN_"?Y7"Y-PG@=.5_%SG/VE?LI]]O.;,R$VK2=.Q&H?9,J
+M-NFF/6&`D?M)4TE/_)R\Y\FN4$67HO0^367"A`@7W^V-N^\/8(GV2=^?QQ^5
+M/\'2_G?$FC.=&KA[MV=8WV+QN_55Z[&Y_[;@HZ^_6`4T#W=[EEQQ^9X%H#1Z
+M-'N(2CD[,BXOO;SOUB'^8<4+0RW;E"5'E348R.F_/IFC_3HQN25[IF?SK>VP
+M1;$+=5WML5RO$D[DQK`NMQQ9GG4P$8;1HP]+7MI[CO*G7$*9RL^7U"5OLR_]
+M0=:$D9^2::Y0$#^2@`HZF@-JMH_&*<W)K;%&J?UN,O!<"<C+9PP+;5-2(Y=K
+MR*7@Q^;F?[?4/K?-3!J;$1VL0_BQ>NDNJE!WV5+FQIVRS=]+/2_9?T8@+BX5
+M%DYWB@2'6<-5A)2DIR5=\GALL4!M8L`+W(!="*&$!](?]XI\*S)^?._*5-GC
+MEKT;I*;#<[(IP)8XB5PM<0Y">%B#M$O?.R!P\]E-@1@PP#K0==6++/P=&]Z_
+MK<C?^'(K0AEW.06&#G4>[`6QHV,U(3%SG]0;TGA^]7O@INCE5IM<V$;JO'O9
+M#-BO/F>U\J5PFD=@C[L")"TRP("!`9#ED7(I,;X*WTV)A;S+-XS%]($YQ.#V
+MYX%\YVVKA@#2R`E]?%\$TI>"S6\JD<7C%G1HAQ:""ILUS0H=W?N!W6;P<SC]
+MBV3Y#^BG`!3XGG50%!7*G2!H'))1&5E!:ECS-GO$]R`KL9%;?LT#%OT[_2CT
+MN+77`EQT6IP'8:$F>ZF6KP*92Q3Q"&)OAE=K/`*:\-X7_0&U!("_<?'W&5A/
+M":T/7H!_'HKL]M6A<T;Q35S3,*2B)$^YMZT@*Q(&=XOI6:O><IS@>>^;?"69
+MU7T&V!AZM\YSW#?J4^L)+F[6.O^&1_CAN/7GUK+P\5^_QT2OF_M-*?2G_GJW
+M"Q?MK?PU([G^O!JKL?H)%XBL(KSRQL:5-V3G%E05BYU`YUV<#T3#(*`,C=<P
+MLB]/$S?'MP425!$.>:MX6]D'%OQ&0DIKUTU.IUK'X[\Q4YG5ZBQ@T&<Y7&$!
+MIS>=#.9T(ICE`P.V0DSD>[\KS!YIOS<S$!A=$-H<F0]A>@,!9%"6!A?S<';]
+M@VH.,E2`7T.I=7N`MJLE%>O-]8#]-4HL$D'[#H$2$LSANM9[)0S67`;3ATL@
+M&'/$HF="%=F5>_ILB>2\$>88*SR79G,AW%W<[V]-=(V'!LJ@/'/C_>,Y+WVF
+M`FBZ&.;AJ33"$;#6D]G6R7F"71P%W7J"EII/7_'/^3%Y&731NB7#>/>%Y?&7
+ME^N5*$U<L]R3DL<%;CT1]VD3WR#?'V*NI;WHW-K-@GTM/G`XF>-"$SWXZ"P+
+M1+T3Q(MT581--FH]2^_M"3KC#ASF1SV9T]G8$DXQ27G)H^JI9(!!CI'"Y];(
+MLIPHY#\XZIT(C<Q\KO,V"\T/TSFE>\T^/!\MNB;!<&``*T@2M7.0^<D``=P)
+4RAL```LH.J*QQ&?[`@`````$65JE
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file docker/crdep-base.Dockerfile &&
+
+xz -dc ${lock_dir}/xzi > 'docker/crdep-base.Dockerfile' && \
+  (set 20 22 12 31 13 34 37 'docker/crdep-base.Dockerfile'
+   eval "${shar_touch}") && \
+  chmod 0664 'docker/crdep-base.Dockerfile'
+if test $? -ne 0
+then ${echo} "restore of docker/crdep-base.Dockerfile failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'docker/crdep-base.Dockerfile': 'MD5 check failed'
+       ) << \SHAR_EOF
+affdc47c06fc9d76a13f239651afc10b  docker/crdep-base.Dockerfile
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'docker/crdep-base.Dockerfile'` -ne 3530 && \
+  ${echo} "restoration warning:  size of 'docker/crdep-base.Dockerfile' is not 3530"
+  fi
+fi
+# ============= kernel/linux-5.15.85-config ==============
+if test ! -d 'kernel'; then
+  mkdir 'kernel'
+if test $? -eq 0
+then ${echo} "x - created directory kernel."
+else ${echo} "x - failed to create directory kernel."
+     exit 1
+fi
+fi
+if test -n "${keep_file}" && test -f 'kernel/linux-5.15.85-config'
+then
+${echo} "x - SKIPPING kernel/linux-5.15.85-config (file already exists)"
+
+else
+${echo} "x - extracting kernel/linux-5.15.85-config xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+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
+%```$65J3
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file kernel/linux-5.15.85-config &&
+
+xz -dc ${lock_dir}/xzi > 'kernel/linux-5.15.85-config' && \
+  (set 20 22 12 31 13 58 29 'kernel/linux-5.15.85-config'
+   eval "${shar_touch}") && \
+  chmod 0664 'kernel/linux-5.15.85-config'
+if test $? -ne 0
+then ${echo} "restore of kernel/linux-5.15.85-config failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'kernel/linux-5.15.85-config': 'MD5 check failed'
+       ) << \SHAR_EOF
+b87fc86fbea0eb802ced2eaca23c4efd  kernel/linux-5.15.85-config
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'kernel/linux-5.15.85-config'` -ne 84687 && \
+  ${echo} "restoration warning:  size of 'kernel/linux-5.15.85-config' is not 84687"
+  fi
+fi
+# ============= scripts/crdep-main.sh ==============
+if test ! -d 'scripts'; then
+  mkdir 'scripts'
+if test $? -eq 0
+then ${echo} "x - created directory scripts."
+else ${echo} "x - failed to create directory scripts."
+     exit 1
+fi
+fi
+if test -n "${keep_file}" && test -f 'scripts/crdep-main.sh'
+then
+${echo} "x - SKIPPING scripts/crdep-main.sh (file already exists)"
+
+else
+${echo} "x - extracting scripts/crdep-main.sh xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`!>`%Q=`!&(0"+W2$,]5H*?_QN)
+M2\.3!RK\%/G%FJL:E`S)&VU'UJPHKR;JKQXM.Z+6"!.;J6?P._,@%F2;3655
+MXGEM5)KV"B4)8_AH<>U0&XZ>WV"@(7S,#<UG0/'I.PA>`"XM.,D3.UQ&``%X
+17[`*M#P?MO-]`0`````$65J>
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file scripts/crdep-main.sh &&
+
+xz -dc ${lock_dir}/xzi > 'scripts/crdep-main.sh' && \
+  (set 20 22 12 31 13 30 20 'scripts/crdep-main.sh'
+   eval "${shar_touch}") && \
+  chmod 0775 'scripts/crdep-main.sh'
+if test $? -ne 0
+then ${echo} "restore of scripts/crdep-main.sh failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'scripts/crdep-main.sh': 'MD5 check failed'
+       ) << \SHAR_EOF
+990d04a513f56e55db988040bf5c37e3  scripts/crdep-main.sh
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'scripts/crdep-main.sh'` -ne 95 && \
+  ${echo} "restoration warning:  size of 'scripts/crdep-main.sh' is not 95"
+  fi
+fi
+# ============= scripts/crdep-main.sh~ ==============
+if test ! -d 'scripts'; then
+  mkdir 'scripts'
+if test $? -eq 0
+then ${echo} "x - created directory scripts."
+else ${echo} "x - failed to create directory scripts."
+     exit 1
+fi
+fi
+if test -n "${keep_file}" && test -f 'scripts/crdep-main.sh~'
+then
+${echo} "x - SKIPPING scripts/crdep-main.sh~ (file already exists)"
+
+else
+${echo} "x - extracting scripts/crdep-main.sh~ xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,`0`-(R$@+V)I;B]B87-H"@H````'
+;1"+9WT]/F``!)@X(&^`$'[;S?0$`````!%E:
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file scripts/crdep-main.sh~ &&
+
+xz -dc ${lock_dir}/xzi > 'scripts/crdep-main.sh~' && \
+  (set 20 22 12 31 13 29 24 'scripts/crdep-main.sh~'
+   eval "${shar_touch}") && \
+  chmod 0775 'scripts/crdep-main.sh~'
+if test $? -ne 0
+then ${echo} "restore of scripts/crdep-main.sh~ failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'scripts/crdep-main.sh~': 'MD5 check failed'
+       ) << \SHAR_EOF
+9e5ff423ca31c4e4236f137d1081ff1a  scripts/crdep-main.sh~
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'scripts/crdep-main.sh~'` -ne 14 && \
+  ${echo} "restoration warning:  size of 'scripts/crdep-main.sh~' is not 14"
+  fi
+fi
+# ============= xtrafiles/45-allow-colord.pkla ==============
+if test ! -d 'xtrafiles'; then
+  mkdir 'xtrafiles'
+if test $? -eq 0
+then ${echo} "x - created directory xtrafiles."
+else ${echo} "x - failed to create directory xtrafiles."
+     exit 1
+fi
+fi
+if test -n "${keep_file}" && test -f 'xtrafiles/45-allow-colord.pkla'
+then
+${echo} "x - SKIPPING xtrafiles/45-allow-colord.pkla (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/45-allow-colord.pkla xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`%P`)A=`"V02@70F95D42B1",UC
+MVF+#S0@SX%%H[F*KP](&X]=T1;_.;@I&90L&K7:)N0BQR0/J4FM82XB8MN<S
+M][QGW-ZP-Z$$L=C./9@1/V%KBSRD90XIL(G/':F.;V/4VQ#KLH-7O0IIYH*$
+M@3(*.A*0"LROF"E71:;+=%2OCZK_ZZ!RL85PGTS=.--P@,AL#/;=BJ1P:6M,
+D;0```$EX">FA?IGP``&T`?$"``"B"3!"L<1G^P(`````!%E:
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/45-allow-colord.pkla &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/45-allow-colord.pkla' && \
+  (set 20 22 12 24 18 59 48 'xtrafiles/45-allow-colord.pkla'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/45-allow-colord.pkla'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/45-allow-colord.pkla failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/45-allow-colord.pkla': 'MD5 check failed'
+       ) << \SHAR_EOF
+67467e92e37bfbc8e6f9ab9c4bbe0433  xtrafiles/45-allow-colord.pkla
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/45-allow-colord.pkla'` -ne 369 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/45-allow-colord.pkla' is not 369"
+  fi
+fi
+# ============= xtrafiles/bash_login ==============
+if test ! -d 'xtrafiles'; then
+  mkdir 'xtrafiles'
+if test $? -eq 0
+then ${echo} "x - created directory xtrafiles."
+else ${echo} "x - failed to create directory xtrafiles."
+     exit 1
+fi
+fi
+if test -n "${keep_file}" && test -f 'xtrafiles/bash_login'
+then
+${echo} "x - SKIPPING xtrafiles/bash_login (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/bash_login xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`+&`8Q=`!&(!LAJF2%*N=-^L&^M
+M],V_PR72!R:SQX9ZNH7#YYD2PI_DNVHAF=0])WPP3WA<COUU$E7TCOF&80\%
+M2;D@S2A#-TF8O4U$)5=SUTWQKQ=M-!(K]9`:^>&(:3?IXK7""QY*'W/4*`VP
+M8>(:(X`$H@T8%DJN`$?!_<Q0E:7R^'Y+RG,4$@$,9R>&!+W;)'DS,#P7Y62W
+MV`Z[_.HYX%OM'0P3QP<5G#L;Z:<O"^,[VT`<Z(5DBP=):C'?%ANS&K]1U'W:
+M+R7-^H6E*:2/7?9H!;,MKK^HI==(L)IVQ'_[/?PJMV(?(":!+F(BRPN5'&T1
+M@]N(:5H<I;GS$AZ1@_`/#OR;2XA9P#!)`*OD1#K:$4][R[U#D0%;]7^:`@0;
+MHO\P)*(4NB"Q!%LN2_77D=ZAI@L909P;N+$3::^=V/"_]]Q0_39/R3&*]RLM
+M!`GCC,31OHSWM7%L"7`\I"UYRFAZ8OB$)]1RNLBEM3;_A7^$L9D_-&@LZ<<0
+M1IWL!C:GZ/G`&1%'M1IAEGX`9(:P0``]"%(#T[HWL0`!J`/'!0``VBGKG+'$
+*9_L"``````196A%'
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/bash_login &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/bash_login' && \
+  (set 20 22 12 26 19 12 18 'xtrafiles/bash_login'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/bash_login'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/bash_login failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/bash_login': 'MD5 check failed'
+       ) << \SHAR_EOF
+8520563579328980d08227b49a2bea43  xtrafiles/bash_login
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/bash_login'` -ne 711 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/bash_login' is not 711"
+  fi
+fi
+# ============= xtrafiles/crd-auth ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/crd-auth'
+then
+${echo} "x - SKIPPING xtrafiles/crd-auth (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/crd-auth xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`)6`8-=`!&(0"+W2$,]5H*?_QN)
+M2\.2]*BSL),V.A=;8^X!/GYL?!_^9FKVTB`A7*QNZ#(\#K3HH[<*XZ-,>CW'
+M3$@P^'#>ZJ;?)/N`[3AH<5MYIJ21VBY4;C(#,*RU533PT.9@YZ;_RDT,0<U$
+M!?("`^V,2-PHD1@LI!B2Z6<D-$H/RZ6&L4,_38A\Y_8"6/P9+8-M0Y#<*LVB
+M,$),9YM`RQ.O1[K0ES8%[QA(3L<F);#)]`*!NFE;19M'M.3JRHR9(Z]X>0=V
+M2979VDU35#!-?>4ZO<O*?+08S-NKSK;K\,[V:<=@;ILSJ#F]%[B2U@7=_](<
+M&FMT7%`J!^.1AFPGM#2_N&;(C3)?=A4-*%UWN*80(;.]R&)V5%T=8K9-3EU-
+M**'X)MWP?3$($G4E6U@W'=-?P,B;J%"X<]5+=8PW\(+9C2P%P"AB_:-4JLUK
+M5?NDNR9:@_%G=@P4>;E;P&ABQC1RV1HBY!SW!C\U+C0G*1:A1ISQ.C2W1(HL
+MO;M5JM+*%7A;/A01H```BFW69O900<4``9\#UP0``&<C3]2QQ&?[`@`````$
+"65I5
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/crd-auth &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/crd-auth' && \
+  (set 20 22 12 27 10 37 46 'xtrafiles/crd-auth'
+   eval "${shar_touch}") && \
+  chmod 0775 'xtrafiles/crd-auth'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/crd-auth failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/crd-auth': 'MD5 check failed'
+       ) << \SHAR_EOF
+17b872bf4ffb10343ad079237f08e787  xtrafiles/crd-auth
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/crd-auth'` -ne 599 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/crd-auth' is not 599"
+  fi
+fi
+# ============= xtrafiles/fsmod.conf ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/fsmod.conf'
+then
+${echo} "x - SKIPPING xtrafiles/fsmod.conf (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/fsmod.conf xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`!A`%-=`!&(!@B192:56TB!&WKA
+M#;P=W.;O@L:92*&%H,Q]^M6_/-EQZU^">7*B)XY'A.4P$HC0.%M(@MXE)T.U
+M)72/^=OIYK-^*_<K5SB<QD23X)\Q$*G````/^2P-Y5M_;@`!;V(WPE]A'[;S
+)?0$`````!%E:
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/fsmod.conf &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/fsmod.conf' && \
+  (set 20 22 12 29 18 50 30 'xtrafiles/fsmod.conf'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/fsmod.conf'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/fsmod.conf failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/fsmod.conf': 'MD5 check failed'
+       ) << \SHAR_EOF
+ac9b5ce643cd58b717989f3643a86114  xtrafiles/fsmod.conf
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/fsmod.conf'` -ne 98 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/fsmod.conf' is not 98"
+  fi
+fi
+# ============= xtrafiles/hosts ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/hosts'
+then
+${echo} "x - SKIPPING xtrafiles/hosts (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/hosts xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`"]`(9=`!B,@TC=S'=(D(84^.8)
+MG^*GYO`D/+N,QHC\.[*ZJ&!3Y(@BB@EQ'WGD$>D)OX3*%P%C/'7>>Y.&6WS]
+M[?R\BM^C+3>=Q?R>Y#W:TX0M_N53TF)SR^(?ABX$RLJG/VI<(FQC>7E?3M33
+M,!$&4O`[ODB9NOC!,$IA2R4IB\KJ&[&Z:=;*+3^D````:[R7*=`_F?0``:(!
+4O@$``!8>CE:QQ&?[`@`````$65KJ
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/hosts &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/hosts' && \
+  (set 20 22 12 26 19 10 27 'xtrafiles/hosts'
+   eval "${shar_touch}") && \
+  chmod 0644 'xtrafiles/hosts'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/hosts failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/hosts': 'MD5 check failed'
+       ) << \SHAR_EOF
+0c94d16d826fff7f64fa7e8ba2b3af46  xtrafiles/hosts
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/hosts'` -ne 190 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/hosts' is not 190"
+  fi
+fi
+# ============= xtrafiles/init.c ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/init.c'
+then
+${echo} "x - SKIPPING xtrafiles/init.c (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/init.c xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`-<`=!=`!>*?4O-*U-?YYLUH`ME
+M>,:<IYR.X`OGW@_Z4:&J6#NR-I`8E;UN&`1W(IR@Y%_D8H^<PW1`#<?N`:K]
+M#?L5X.$7ZP/H4@13-XA2%RD'>(.!J+V1HN>=,*DO39&AMVF=D=R%AJ2M?K`7
+M3D-[_^G1`>ES$0"HI2S>$CZ3,1ST5K/HUETC?=N=8EV?JU%I^HW4H?L.VR/.
+M9R(N.C2<4ONYZW)C6,2TA;(=+,&87VCX';%0G=3W(D']*MTU`WF%ZQU`S0P:
+MLZ\9[)I5%4\!=J,NB3?8%7L*<?<G:L[Z(ZFN!M4E50+B4$'O[D(UDK1=]6P<
+ML=&!.(BETTJDN-RJYCF*'0DN&<`$!'R&'9`R)[$#:U8S-?XXI56(=39G`(=Z
+MR3#7EBA3B1S']NH!UO$CI0\79/NT;VKM9DZ4*I?;S#L"`KM%?*:8DOW,0@"K
+MX(9"(TR?=>$HKO.T%.6Y>*`P2PY1EIXK-U=O6EOC<6)CF#(;;S"T0QS1\`9'
+MC@Z(LS()!@,[A9X\26B'P#F!?S3!/_<$(?TVT)BW_(7V@[:C,VSPLR,H:SLN
+MS3.)[TO*$AY@['[>=`_B[6!)3Z.P__NBC>4T=H&T<=U^2D'/-\!F0J#[[:<`
+A`#,*%*R6[Z/_``'L`]T&```":,`UL<1G^P(`````!%E:
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/init.c &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/init.c' && \
+  (set 20 22 12 29 15 27 40 'xtrafiles/init.c'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/init.c'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/init.c failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/init.c': 'MD5 check failed'
+       ) << \SHAR_EOF
+720ea2bb49d2c88f40871b3c5079e854  xtrafiles/init.c
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/init.c'` -ne 861 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/init.c' is not 861"
+  fi
+fi
+# ============= xtrafiles/issue ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/issue'
+then
+${echo} "x - SKIPPING xtrafiles/issue (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/issue xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`(N`6!=`"H:"2=D'(>0LRGVD:K(
+M#Z6P$,-R/N%$<(TG&$C!I4;U5:J\#K$(]Q^<.0`B9\?5\H95OJ&_,0S-'R?E
+M^V;&LB-V'V26,Y9_SH;T&%^CBO[,%OGL_COB%U4R)0X2/%FB3/4Y`80VQ'5H
+MBBP^;\'>'[^M!(:IQSQF*WY,R`[;X'9"T,&/=P20Y6:!$6+PM3EN]]K45PE8
+M-9(.QV<$?;$-OK;'\:K78W%H*##G6%S2!%1`!4SKA0N_7;%1#!@QRR!UK),Z
+M`/GJL7`[BZM?LP?<2'AYRG[E=?Z!W$7<TR`*O^;WGVE9%O"+ZQ="\HA*$M"E
+MV(G1EQ$3#AP33G-,`?C:%>B\I1EW1`\N4W3D-664;`0'0=-/-[V$:%77`^-T
+ME@SF27V(NTZ[7T$;A,<3F:I+7(<4?+V\]`_4G5HBEF8V2J%@(\3GFRB)7G6D
+M7GFF^3\H+/:0O.B7!+!+JH,;_3/(_```+GTL_Z^2Q*@``?P"KP0``%#_Q,FQ
++Q&?[`@`````$65J7
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/issue &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/issue' && \
+  (set 20 22 12 28 13 39 08 'xtrafiles/issue'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/issue'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/issue failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/issue': 'MD5 check failed'
+       ) << \SHAR_EOF
+7a1cd23fc48acfbd45275af1197af793  xtrafiles/issue
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/issue'` -ne 559 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/issue' is not 559"
+  fi
+fi
+# ============= xtrafiles/jl.conf ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/jl.conf'
+then
+${echo} "x - SKIPPING xtrafiles/jl.conf (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/jl.conf xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,`0`N6TIO=7)N86Q="E-Y<W1E;4UA
+M>%5S93TQ,#!-"E-Y<W1E;4ME97!&<F5E/3%'"@H``!;.+*^)S,BU``%'+[!1
+X.;S0?MO-]`0`````$65IE
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/jl.conf &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/jl.conf' && \
+  (set 20 22 12 27 10 50 26 'xtrafiles/jl.conf'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/jl.conf'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/jl.conf failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/jl.conf': 'MD5 check failed'
+       ) << \SHAR_EOF
+6548e1c206f8e8901df2278ef338da2a  xtrafiles/jl.conf
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/jl.conf'` -ne 47 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/jl.conf' is not 47"
+  fi
+fi
+# ============= xtrafiles/nolock.desktop ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/nolock.desktop'
+then
+${echo} "x - SKIPPING xtrafiles/nolock.desktop (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/nolock.desktop xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`!Q`%E=`"V1"0U'438*I<@!ZK4@
+MSMHA"R3CL][Y]N&,V-#)2BRW$>70N7F,D6+\!H[FVW:O4@\OU[8*2[$U3%?J
+M[P>,#E!&ZYZN;SIU@]\=@3N&\/65EH].%7F[3C[@`````&.QWA!`Z4YT``%U
+1<H@HQ<P?MO-]`0`````$65J&
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/nolock.desktop &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/nolock.desktop' && \
+  (set 20 22 12 27 18 58 21 'xtrafiles/nolock.desktop'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/nolock.desktop'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/nolock.desktop failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/nolock.desktop': 'MD5 check failed'
+       ) << \SHAR_EOF
+259e6326946ee3acb829cfe96c233e80  xtrafiles/nolock.desktop
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/nolock.desktop'` -ne 114 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/nolock.desktop' is not 114"
+  fi
+fi
+# ============= xtrafiles/nolock.sh ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/nolock.sh'
+then
+${echo} "x - SKIPPING xtrafiles/nolock.sh (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/nolock.sh xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`%@`*!=`!&(0"+W2$,[VKY?`MW<
+MAJ9I>:T52)_Y6O'<A46<ME-X(AX/2CZQ/;(]L!`9&-`)@WS&W])G]DN'?Y&<
+ME@^!G?5M`J5\KGT`_#C1U409U'PM.HF"<PT911'9LM?MX>1_"O>7F'RQ0VPZ
+MT7L7!R*!*GA45F=/%JIN&G6!Z]'[+7XUAC&O=.`H<$14=NX+87^)F$3Y=>>P
+LPXB=(Y\G#.1:)```=BK.G!F/%78``;P!X0(``%#<>OZQQ&?[`@`````$65JP
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/nolock.sh &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/nolock.sh' && \
+  (set 20 22 12 27 12 35 35 'xtrafiles/nolock.sh'
+   eval "${shar_touch}") && \
+  chmod 0775 'xtrafiles/nolock.sh'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/nolock.sh failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/nolock.sh': 'MD5 check failed'
+       ) << \SHAR_EOF
+df66e86bb7c290526507cb76087b809c  xtrafiles/nolock.sh
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/nolock.sh'` -ne 353 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/nolock.sh' is not 353"
+  fi
+fi
+# ============= xtrafiles/org.freedesktop.timedate1.policy ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/org.freedesktop.timedate1.policy'
+then
+${echo} "x - SKIPPING xtrafiles/org.freedesktop.timedate1.policy (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/org.freedesktop.timedate1.policy xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`N0`P-=`!X/RX<1V,YFD0^#'LK]
+M>S/4?^FWVB@Q=B5F($TJ"6UJ]REP.##GS"%@B[-9*]3_0S>]OC\TJ9;V_(GH
+M4GWS1\SD&K`V2+L)3I>[V&VGQ*/(N9-D[YZ04EIB+(!-OX#QK93C=T=L%5P3
+M4JGJ(,H2!?B#MM$FLBNYEW2I.#?S(HPG:<IEZPF8'"3:I]5\YH<E!>#H@R=5
+MKAW$8&/^B3`4;O\%/KO2$/)Q?<$`33UR(RQ35A&'_0DD39^,!$RUE$,J4D,6
+MZ<'XMY6HV4KBP.-MIN?":@*F*=\+NZ=<[`4X#NP>SRR_:Y2U186D^E9`P39)
+M#;?UK`K+=KXG@=9;WN`!Y\*<$_4$FNF!/O$U%,<&FD6'C(@RE;;?>P$\%E2"
+MR6[NK)6N+>@TUA_-$+:$UMW6B-]_[-]6<[Y;:HTH3&&E$40]E+3.B+Z%LX9+
+M?Z6"MCSA%@,X)$6M'+1VJPO,]>TJ:U(.^%EF\@2<[/,!8G$36:I6WLL)5*"'
+M/!93>B?]@S0BV!1>RD#6R^MA\CMO0>SE5*^+LS(OQ#CN:$&&<M\M==23Y/"*
+M/KJ[<SYS#!84]7YKZZ+NPA(;[`D!O9[.>DMCAP4[NKXG4)V-(WG03:4V01H[
+M!DQ?.13M3S&PGO[4*M$$SK[9*_;_F^5E,0I*.RX,;[P!A,MU95*,491L-M)K
+M"LJ9TURSM0N%P`^W9H3$I\0(%FXI9O6F;B1FIFG7<:J^E?J(`A4QK$WU'N9F
+MS@1K#&?[B\6#H,T!()MI;"%EY7,*9GZ*M'U@"O0+(04J2-8DP]#&.@ID8U3[
+MTYVM#;IHED75PA>^ZZG^AA'HHU\.PGNG2D-TN!OV=@NFJ'6$O>1`]'[*RHE[
+MPBZZ8`:LP=^B'1S?-,CZ;E`LM!VAM-U`^\2N^X%;2AC@9\"1L_6873!C1`Q\
+MA`8Q`$AL$_Z*"#K5$P0=HZKVOOLVDK(ZYOVUKE8M2:8+M5CBCN_UJD#.-%#@
+M[;32D_=T#:W-0N0"Y(W$!+%U@)7T&O>8S7=K_9[X;97/5(>V&```-)0^`AS@
+:N'```9\&D1<``-^VL+RQQ&?[`@`````$65IK
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/org.freedesktop.timedate1.policy &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/org.freedesktop.timedate1.policy' && \
+  (set 20 22 12 26 18 00 34 'xtrafiles/org.freedesktop.timedate1.policy'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/org.freedesktop.timedate1.policy'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/org.freedesktop.timedate1.policy failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/org.freedesktop.timedate1.policy': 'MD5 check failed'
+       ) << \SHAR_EOF
+d7d3c89d9f892c47f98d8f70dea44cd8  xtrafiles/org.freedesktop.timedate1.policy
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/org.freedesktop.timedate1.policy'` -ne 2961 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/org.freedesktop.timedate1.policy' is not 2961"
+  fi
+fi
+# ============= xtrafiles/overlay ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/overlay'
+then
+${echo} "x - SKIPPING xtrafiles/overlay (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/overlay xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`+#`5U=`!&(`D8]]!8T<PH-][H;
+MY(=')?6&84\Z0_:.H_LI<@:Q2H9+:"=:/\$INSZ;'>_S.:[CAWEI5]H<,IDI
+M$77OL25:RY0C):8B;!5-YUF!2M+Y>PTK6+]V#ZS_HSNY2LDGOLO-?!4M)RX+
+MIA",RPN7YB7()."^[%\@%'@[=&OF7X3(?9<@R7!65X+[-\<0M:,#C`G\1A/P
+M::U1-8\<M4NY$$PLEI_K;R0-#G8/?49+(9UQ^J-3.P?(=R/[*6:6'=NR;Q(5
+MPM<2*9^CV%:,`H+K$YQ]UJ8@.I.PP'NB&E-N>VB]O?1T].N0EN^0_'#`^,%<
+M5>LY=<=&CWVJ7,_D+KOK!5'^.^4)`D8E(YF8]B]@.5=NR**4NDD^8$O(J2-%
+M(^EK\;R;K3LL9E%(#K^=(DSXI4_S"<X3FY1,*QS^,)IG1S%)`BG)$DZK1`TB
+MU@5OZ4-KG`60R"T>C9DSW[3(*.``````9O%_?#&[W7```?D"Q`4``-9T['2Q
++Q&?[`@`````$65H>
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/overlay &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/overlay' && \
+  (set 20 22 12 29 18 50 54 'xtrafiles/overlay'
+   eval "${shar_touch}") && \
+  chmod 0775 'xtrafiles/overlay'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/overlay failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/overlay': 'MD5 check failed'
+       ) << \SHAR_EOF
+2fe8b6e0670b87b7788d317356df1615  xtrafiles/overlay
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/overlay'` -ne 708 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/overlay' is not 708"
+  fi
+fi
+# ============= xtrafiles/squash ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/squash'
+then
+${echo} "x - SKIPPING xtrafiles/squash (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/squash xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh2139484/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`)F`6!=`!&(0"+W2$,[VKY?`MT'
+M97!YN[;4T;1NY67_X%^;!U4].HL>>/Z4AB=Y`>G/VF-@)KS7&!`.GWFYYQPN
+M0"T3VS<UQ!BH_^@97PGWKBKG0[+"3D9F,>_D.U"1(NU0N05Y]*K=6%KH<\=F
+M,$>L4_&)=(D"<(+Y-__>+6V8&@`^)6YB?#!.^US5#<DT\[`1QFI;X:'ZV.6&
+M[F.0(,3F7[/5M\E8)879Z>[JXIJ=E8$-?[X+_4?YVQ2#[S6?GM3S?$6LD-$0
+MSY3/[D"N(\9&T3RHC6062MN]EM/=8):`S4C=O\\$(ZEJ1@N.&M*@Z]![15YV
+M3%2)1&VNS=$8?^9L0*BI,M'E'4]*?!-<MUJ2D_Y>?NM0?8)\,'I\GE"3Z$"D
+M2N&9RQ!-V+`6\&1AMCR.N`3KL;DB,\"L[57T.GM#=#H$WJ1%.YN8Y(-KC57^
+M<UT'/TUZXI2MZRH;XY-:7B<Q\*N=Z```_=M_?1?U],$``?P"YP0``(*/9)>Q
++Q&?[`@`````$65H;
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/squash &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/squash' && \
+  (set 20 22 12 29 13 10 50 'xtrafiles/squash'
+   eval "${shar_touch}") && \
+  chmod 0775 'xtrafiles/squash'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/squash failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/squash': 'MD5 check failed'
+       ) << \SHAR_EOF
+2a2166ae94905256a680f565c587a874  xtrafiles/squash
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/squash'` -ne 615 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/squash' is not 615"
+  fi
+fi
+if rm -fr ${lock_dir}
+then ${echo} "x - removed lock directory ${lock_dir}."
+else ${echo} "x - failed to remove lock directory ${lock_dir}."
+     exit 1
+fi
+exit 0
+}
