@@ -29,3 +29,6 @@ src/.*.swp
 .envrc
 *.swp
 kernel/bzImage
+kernel/init
+kernel/kernel.tar
+

@@ -15,6 +15,6 @@ crdep.shar: $(shell find $(TOPDIRS) | grep -v '~' )
 
 update:
 	rm $(HOME)/.crdep/scripts/crdep-main.sh
-	make
+	make crdep
 	./crdep -c
 

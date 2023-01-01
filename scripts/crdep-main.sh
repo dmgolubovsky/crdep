@@ -8,6 +8,8 @@
 BASEPATH="$(dirname \"$0\")"
 
 # // CRDEP: build and maintain VM bootale images for the Chrome Remote Desktop EndPoints
+# // The general syntax is: crdep action [parameters]. Action may be abbreviated as long
+# // as it is not ambiguous (e. g. "kern" instead of "kernel")
 # // The following actions are avalable:
 # //
 
@@ -16,8 +18,9 @@ BASEPATH="$(dirname \"$0\")"
 # //   Usually the kernel is built automatically at the first custom endpoint build.
 # //
 
-function kernel {
-  echo
+function _kernel {
+  cd $CRDEPDIR
+  DOCKER_BUILDKIT=1 docker build -f ./docker/kernel.Dockerfile -o - . |  tar x linux-5.15.85/arch/x86/boot/bzImage -O > ./kernel/bzImage 
 }
 
 # // baseimg: 
@@ -25,7 +28,7 @@ function kernel {
 # //   the minimal shell and a terminal emulator. It may however be deployed as a working endpoint.
 # //
 
-function baseimg {
+function _baseimg {
   echo
 }
 
@@ -39,7 +42,20 @@ function baseimg {
 	exit 1
 }
 
-echo "$@"
+# Find if the action has been defined by a function. These functions names start with underscore.
 
+action="_$1"
 
+flist=$(declare -F | awk '{print $NF "\n"}' | grep '^_')
+
+faction=$(echo -n "$flist" | grep "^$action")
+fexist=$(echo -n "$flist" | grep "^$action" | wc -l)
+
+[ $fexist -ne 1 ] && {
+  echo "The requested action $action is not defined or ambiguous"
+}
+
+shift
+
+"$faction" "$@"
 
