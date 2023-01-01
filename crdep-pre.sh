@@ -16,6 +16,7 @@ export CRDEPDIR="$HOME/.crdep"
 
 [ -x "$CRDEPDIR/scripts/crdep-main.sh" ] && {
   "$CRDEPDIR/scripts/crdep-main.sh" "$@"
+  exit 0
 } || {
   mkdir -p "$CRDEPDIR"
   cd "$CRDEPDIR"

@@ -11,4 +11,10 @@ crdep:	crdep-pre.sh crdep.shar
 crdep.shar: $(shell find $(TOPDIRS) | grep -v '~' )
 	shar -M -C xz docker/* kernel/* scripts/* xtrafiles/* > crdep.shar
 
+# Force update of all files even if the script is installed.
+
+update:
+	rm $(HOME)/.crdep/scripts/crdep-main.sh
+	make
+	./crdep -c
 
