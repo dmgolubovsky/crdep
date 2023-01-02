@@ -12,13 +12,14 @@ crdep:	crdep-pre.sh crdep.shar
 
 # Create the shell archive with all files to be installed.
 
-crdep.shar: $(shell find $(TOPDIRS) -type f | grep -v ~$$ )
+crdep.shar: $(shell find $(TOPDIRS) -type f | grep -v ~$$ | grep -v .*\.swp$$ )
 	shar -M -C xz $^ > crdep.shar
 
 # Force update of all files even if the script is installed.
 
 update:
 	rm -f $(HOME)/.crdep/scripts/crdep-main.sh
+	rm -f crdep.shar
 	make crdep
 	./crdep -c
 
