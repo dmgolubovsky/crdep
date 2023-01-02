@@ -2,19 +2,23 @@
 
 TOPDIRS=docker scripts kernel xtrafiles
 
-all:	crdep 
+all:	crdep
+
+# Create the installable script.
 
 crdep:	crdep-pre.sh crdep.shar 
 	( cat crdep-pre.sh crdep.shar ; echo '}' ) > crdep
 	chmod +x crdep
 
-crdep.shar: $(shell find $(TOPDIRS) | grep -v '~' )
-	shar -M -C xz docker/* kernel/* scripts/* xtrafiles/* > crdep.shar
+# Create the shell archive with all files to be installed.
+
+crdep.shar: $(shell find $(TOPDIRS) -type f | grep -v ~$$ )
+	shar -M -C xz $^ > crdep.shar
 
 # Force update of all files even if the script is installed.
 
 update:
-	rm $(HOME)/.crdep/scripts/crdep-main.sh
+	rm -f $(HOME)/.crdep/scripts/crdep-main.sh
 	make crdep
 	./crdep -c
 

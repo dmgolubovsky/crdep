@@ -1,0 +1,10 @@
+[Unit]
+Description=Start DHCP
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/sbin/dhclient %i
+
+[Install]
+WantedBy=basic.target

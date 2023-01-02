@@ -29,7 +29,8 @@ function _kernel {
 # //
 
 function _baseimg {
-  echo
+  cd $CRDEPDIR
+  DOCKER_BUILDKIT=1 docker build -f ./docker/crdep-base.Dockerfile -t crdep-base .
 }
 
 # // help:    
@@ -52,7 +53,8 @@ faction=$(echo -n "$flist" | grep "^$action")
 fexist=$(echo -n "$flist" | grep "^$action" | wc -l)
 
 [ $fexist -ne 1 ] && {
-  echo "The requested action $action is not defined or ambiguous"
+  echo "The requested action $action is either not defined or ambiguous"
+  exit 1
 }
 
 shift

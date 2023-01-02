@@ -1,3 +1,9 @@
+# Build the base image for Chrome Remote Desktop EndPoint.
+# The base image is to be reused by custom endpoint builds.
+# It contains only the very basic GNOME shell, the Gnome Online Accounts package,
+# and the Chrome Remote Desktop package. This image is not intended to be deployed,
+# but it is fully functional.
+
 from ubuntu:20.04
 
 run apt -y update
@@ -10,29 +16,26 @@ run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs syste
                    software-properties-common inetutils-ping less vim gnome-session gnome-online-accounts nautilus gnome-terminal \
                    squashfs-tools squashfs-tools-ng
 
+# The hostname for this endpoint is "crdep-base"
+
 run /usr/bin/echo crdep-base >/etc/hostname
 
 # Add / overwrite custom files / remove unneeded
 
-add init /sbin/
-add units /lib/systemd/system
-add hosts /etc
-add issue /etc
-add bash_login /root/.bash_login
-add crd-auth /usr/bin
-add squash /usr/bin
-add overlay /usr/bin
-add nolock.sh /usr/bin
-add nolock.desktop /etc/xdg/autostart
-add jl.conf /etc/systemd/journald.conf.d
-add fsmod.conf /etc/modules-load.d
-add 45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d
-add org.freedesktop.timedate1.policy /usr/share/polkit-1/actions
-
-run rm -f /etc/update-motd.d/* /etc/legal /usr/share/xsessions/gnome.desktop \
-	  /usr/share/gnome-session/sessions/gnome-dummy.session \
-	  /usr/share/gnome-session/sessions/gnome-login.session
-
+add xtrafiles/init /sbin/
+add xtrafiles/units /lib/systemd/system
+add xtrafiles/hosts /etc
+add xtrafiles/issue /etc
+add xtrafiles/bash_login /root/.bash_login
+add xtrafiles/crd-auth /usr/bin
+add xtrafiles/squash /usr/bin
+add xtrafiles/overlay /usr/bin
+add xtrafiles/nolock.sh /usr/bin
+add xtrafiles/nolock.desktop /etc/xdg/autostart
+add xtrafiles/jl.conf /etc/systemd/journald.conf.d
+add xtrafiles/fsmod.conf /etc/modules-load.d
+add xtrafiles/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d
+add xtrafiles/org.freedesktop.timedate1.policy /usr/share/polkit-1/actions
 
 # Configure the network (old way)
 
@@ -62,7 +65,8 @@ run sh -c "dpkg -i chrome-remote-desktop_current_amd64.deb || env DEBIAN_FRONTEN
 
 run rm /chrome-remote-desktop_current_amd64.deb
 
-# Remove these so unnecessary tabs in Gnome settings are not shown
+# Remove these so unnecessary tabs in Gnome settings are not shown 
+# Remove few other unneeded files as well
 
 run rm -f \
           /usr/share/applications/gnome-bluetooth-panel.desktop \
@@ -84,7 +88,10 @@ run rm -f \
           /usr/share/applications/gnome-diagnostics-panel.desktop \
           /usr/share/applications/gnome-usage-panel.desktop \
           /usr/share/applications/gnome-info-overview-panel.desktop \
-          /usr/share/applications/gnome-color-panel.desktop 
+          /usr/share/applications/gnome-color-panel.desktop \
+          /etc/update-motd.d/* /etc/legal /usr/share/xsessions/gnome.desktop \
+	  /usr/share/gnome-session/sessions/gnome-dummy.session \
+	  /usr/share/gnome-session/sessions/gnome-login.session
 
 # Other stuff
 
