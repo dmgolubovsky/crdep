@@ -4,7 +4,7 @@
 # and the Chrome Remote Desktop package. This image is not intended to be deployed,
 # but it is fully functional.
 
-from ubuntu:20.04
+from ubuntu:20.04 as crdep-base
 
 run apt -y update
 run apt -y upgrade
@@ -22,7 +22,7 @@ run /usr/bin/echo crdep-base >/etc/hostname
 
 # Add / overwrite custom files / remove unneeded
 
-add xtrafiles/init /sbin/
+add kernel/init /sbin/
 add xtrafiles/units /lib/systemd/system
 add xtrafiles/hosts /etc
 add xtrafiles/issue /etc
@@ -97,5 +97,8 @@ run rm -f \
 
 run locale-gen en_US.UTF-8
 
+from scratch
+
+copy --from=crdep-base / /
 
 

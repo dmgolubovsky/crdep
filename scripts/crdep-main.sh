@@ -14,13 +14,14 @@ BASEPATH="$(dirname \"$0\")"
 # //
 
 # // kernel:  
-# //   Rebuild a kernel suitable to run an endpoint (with proper virtio support).
-# //   Usually the kernel is built automatically at the first custom endpoint build.
+# //   Rebuild a kernel suitable to run an endpoint (with proper virtio support) and the init program.
+# //   Usually the kernel and init are built automatically at the first custom endpoint build.
 # //
 
 function _kernel {
   cd $CRDEPDIR
   DOCKER_BUILDKIT=1 docker build -f ./docker/kernel.Dockerfile -o - . |  tar x linux-5.15.85/arch/x86/boot/bzImage -O > ./kernel/bzImage 
+  DOCKER_BUILDKIT=1 docker build -f ./docker/init.Dockerfile -o - .   |  tar x init -O > ./kernel/init 
 }
 
 # // baseimg: 
