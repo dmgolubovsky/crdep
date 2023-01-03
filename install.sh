@@ -1,5 +1,7 @@
 #! /bin/bash
 
+make update
+
 # Find the first writable directory on user's PATH and install crdep there (ask first)
 
 fstw=""
@@ -13,3 +15,4 @@ fstw=$(echo $PATH | sed 's/:/\n/g' | while read ; do [ -d "$REPLY" -a -w "$REPLY
 
 dialog --yesno "Install to\n${fstw}?" 6 $((${#fstw} + 10)) && cp crdep "$fstw"
 
+clear
