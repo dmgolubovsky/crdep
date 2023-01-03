@@ -34,6 +34,25 @@ function _baseimg {
   DOCKER_BUILDKIT=1 docker build -f ./docker/crdep-base.Dockerfile -t crdep-base .
 }
 
+# // new <name>:
+# //   Initialize a new endpoint build project in the current directory. It should not be any directory
+# //   under the crdep base directory ($HOME/.crdep). This command creates a default-populated JSON
+# //   file describing the build. If a file with such name already exists it won't be changed.
+# //
+
+function _new {
+  [ -z "$1" ] && {
+    echo "This action requires one parameter: name of the JSON build project file to be default-populated"
+    exit 1
+  }
+  curdir=`pwd`
+  nosub=$(find "$CRDEPDIR" -wholename "$curdir" -and -type d | wc -l)
+  [ $nosub -ne 0 ] && {
+    echo "Current directory should not be a subdirectory of $CRDEPDIR"
+    exit 1
+  }
+}
+
 # // help:    
 # //   Brief information about this script
 
