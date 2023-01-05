@@ -14,7 +14,7 @@ run apt -y autoremove
 
 run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs systemd isc-dhcp-client wget dialog locales ssh sudo mc \
                    software-properties-common inetutils-ping less vim gnome-session gnome-online-accounts nautilus gnome-terminal \
-                   squashfs-tools squashfs-tools-ng
+                   squashfs-tools squashfs-tools-ng sed
 
 # The hostname for this endpoint is "crdep-base"
 
