@@ -24,6 +24,7 @@ function _kernel {
   cd $CRDEPDIR
   DOCKER_BUILDKIT=1 docker build -f ./docker/kernel.Dockerfile -o - . |  tar x linux-5.15.85/arch/x86/boot/bzImage -O > ./kernel/bzImage 
   DOCKER_BUILDKIT=1 docker build -f ./docker/init.Dockerfile -o - .   |  tar x init -O > ./kernel/init 
+  chmod +x kernel/init
 }
 
 # // baseimg: 
@@ -225,8 +226,10 @@ function _authorize {
   vmem=$(jq -r '(.memory)' < "$prjf" | sed 's/null//g')
   vmsmp=$(jq -r '(.smp)' < "$prjf" | sed 's/null//g')
   qemu-system-x86_64 -m ${vmem:-4096} -smp ${vmsmp:-4} \
-    -nographic -no-reboot -no-acpi \
-    -drive file="$qcow",format=qcow2 \
+    -nographic -no-reboot -no-acpi -enable-kvm -cpu host \
+    -drive file="$qcow",format=qcow2,id=root,if=none \
+    -device virtio-blk-pci,id=root,drive=root \
+    -nic user,model=virtio-net-pci,id=vm0 \
     -kernel "$kern" \
     -append "console=ttyS0 root=/dev/vda rw  acpi=off reboot=t panic=-1 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
 }
