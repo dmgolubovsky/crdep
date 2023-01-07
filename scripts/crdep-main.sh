@@ -231,8 +231,50 @@ function _authorize {
     -device virtio-blk-pci,id=root,drive=root \
     -nic user,model=virtio-net-pci,id=vm0 \
     -kernel "$kern" \
-    -append "console=hvc0 root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
-  clear
+    -append "console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
+}
+
+# // squash <name> [yes]:
+# //   Boot the endpoint VM, start a special job to generate a squashed root filesystem image inside the QCOW image.
+# //   The VM will be shutdown and the squashed image retrieved from the QCOW and stored separately.
+# //   if 'yes' is provided on the command line, the squashfs will be booted.
+# //   Only project name should be provided rather than a path to the project file.
+# //
+
+function _squash {
+  [ -z "$1" ] && {
+    echo "This action requires at least one parameter: name of the project to create the squash image for,"
+    echo "and optionally 'yes' to boot it for testing."
+    echo "Do not provide a file name or path, just the project name."
+    exit 1
+  }
+  export prjf=$(readlink -f "$(pwd)/${1}.json")
+  [ ! -e "$prjf" ] && {
+    echo "The project file $prjf does not exist"
+    exit 1
+  }
+  kern=$(readlink -f $(jq -r '(.kernel)' < "$prjf"))
+  user=$(jq -r '(.username)' < "$prjf")
+  qcow=$(readlink -f "$(pwd)/${1}.qcow2")
+  vmem=$(jq -r '(.memory)' < "$prjf" | sed 's/null//g')
+  vmsmp=$(jq -r '(.smp)' < "$prjf" | sed 's/null//g')
+  sqfs="${1}.squashfs"
+  qemu-system-x86_64 -m ${vmem:-4096} -smp ${vmsmp:-4},sockets=${vmsmp:-4},cores=1 \
+    -nographic -no-reboot -no-acpi -enable-kvm -cpu host \
+    -drive file="$qcow",format=qcow2,id=root,if=none \
+    -device virtio-blk-pci,id=root,drive=root \
+    -kernel "$kern" \
+    -append "console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 do.squash=yes"
+  virt-cat -a "$qcow" "/${1}-root.squashfs" > "$sqfs"
+  [ z"$2" = "zyes" ] && {
+    qemu-system-x86_64 -m ${vmem:-4096} -smp ${vmsmp:-4},sockets=${vmsmp:-4},cores=1 \
+      -nographic -no-reboot -no-acpi -enable-kvm -cpu host \
+      -drive file="$sqfs",format=raw,id=root,if=none \
+      -device virtio-blk-pci,id=root,drive=root \
+      -nic user,model=virtio-net-pci,id=vm0 \
+      -kernel "$kern" \
+      -append "console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
+  }
 }
 
 # // help:    

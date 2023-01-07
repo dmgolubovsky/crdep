@@ -1,0 +1,16 @@
+This is your Chrome Remote Desktop Endpoint "\n" boot using the squashfs root filesystem image.
+The authorization tokens for the Chrome Remote Desktop have been preserved in the image.
+
+Log in as root. The password is 'crdep'.
+
+The boot image is immutable, though some amount of the writeable space is available.
+
+Test the applications installed. If everything works as intended, proceed to deployment
+of the endpoint, otherwise run the "authorize" action again (you may need to reauthorize
+the endpoint in sme cases).
+
+After you are done setting it up, type "poweroff" at the root command prompt, then proceed
+to finalize your endpoint.
+
+Enjoy!
+

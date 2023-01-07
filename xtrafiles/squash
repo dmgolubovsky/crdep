@@ -13,6 +13,10 @@ mount -t tmpfs none /newroot
 mkdir -p /tmp/rk
 mount --bind --make-private -o ro / /tmp/rk
 
+# If there is a squashfs image in the root already remove it
+
+rm -f /`hostname`-root.squashfs
+
 # Go where we run mksquashfs and run it
 
 cd /tmp
@@ -26,4 +30,11 @@ umount /tmp/rk
 
 mv /newroot/root.squashfs /`hostname`-root.squashfs
 
+# Shutdown (via reboot)
+
+sync
+
+sleep 1
+
+reboot
 

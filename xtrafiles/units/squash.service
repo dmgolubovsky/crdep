@@ -1,0 +1,14 @@
+[Unit]
+Description=Generate the squashed root VM image
+ConditionKernelCommandLine=do.squash=yes
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=systemctl stop 'serial-getty*.service'
+ExecStart=systemctl stop 'getty*.service'
+ExecStart=/usr/bin/squash
+StandardOutput=file:/dev/ttyS0
+
+[Install]
+WantedBy=basic.target

@@ -25,6 +25,7 @@ run /usr/bin/echo crdep-base >/etc/hostname
 add kernel/init /sbin/
 add xtrafiles/units /lib/systemd/system
 add xtrafiles/hosts /etc
+add xtrafiles/squash.issue /etc
 add xtrafiles/issue /etc
 add xtrafiles/bash_login /root/.bash_login
 add xtrafiles/crd-auth /usr/bin
@@ -40,7 +41,10 @@ add xtrafiles/org.freedesktop.timedate1.policy /usr/share/polkit-1/actions
 # Configure the network (old way)
 
 run systemctl enable dhclient@eth0.service
-run systemctl enable dhclient@enp1s0.service
+
+# Enable squash service (but it runs only if the kernel command line has do.squash=yes)
+
+run systemctl enable squash.service
 
 # Disable these as they are useless (and Network Manager just gets in the way)
 
@@ -96,9 +100,12 @@ run rm -f \
 
 run locale-gen en_US.UTF-8
 
-# Remove poweroff as it does not exit qemu cleanly
+# Remove poweroff as it does not exit qemu cleanly and make it do reboot
 
 run rm /sbin/poweroff
+
+run echo exec /sbin/reboot > /sbin/poweroff
+run chmod +x /sbin/poweroff
 
 from scratch
 

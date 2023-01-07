@@ -32,6 +32,10 @@ mount --bind /dev  /newroot/m/dev
 
 cd /newroot/m
 
+# Replace the issue file
+
+mv ./etc/squash.issue ./etc/issue
+
 # Jump to systemd and normal boot
 
 exec chroot . /bin/systemd
