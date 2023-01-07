@@ -39,7 +39,6 @@ add xtrafiles/org.freedesktop.timedate1.policy /usr/share/polkit-1/actions
 
 # Configure the network (old way)
 
-run systemctl enable conlog.service
 run systemctl enable dhclient@eth0.service
 run systemctl enable dhclient@enp1s0.service
 
@@ -96,6 +95,10 @@ run rm -f \
 # Other stuff
 
 run locale-gen en_US.UTF-8
+
+# Remove poweroff as it does not exit qemu cleanly
+
+run rm /sbin/poweroff
 
 from scratch
 

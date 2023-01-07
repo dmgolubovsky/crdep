@@ -10,7 +10,7 @@ connect with your online accounts, etc.
 
 To generate an immutable endpoint filesystem image, type "squash" at the root command prompt.
 
-After you are done setting it up, type "poweroff" at the root command prompt, then proceed
+After you are done setting it up, type "reboot" at the root command prompt, then proceed
 to finalize your endpoint.
 
 Enjoy!

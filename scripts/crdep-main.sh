@@ -225,13 +225,14 @@ function _authorize {
   qcow=$(readlink -f "$(pwd)/${1}.qcow2")
   vmem=$(jq -r '(.memory)' < "$prjf" | sed 's/null//g')
   vmsmp=$(jq -r '(.smp)' < "$prjf" | sed 's/null//g')
-  qemu-system-x86_64 -m ${vmem:-4096} -smp ${vmsmp:-4} \
+  qemu-system-x86_64 -m ${vmem:-4096} -smp ${vmsmp:-4},sockets=${vmsmp:-4},cores=1 \
     -nographic -no-reboot -no-acpi -enable-kvm -cpu host \
     -drive file="$qcow",format=qcow2,id=root,if=none \
     -device virtio-blk-pci,id=root,drive=root \
     -nic user,model=virtio-net-pci,id=vm0 \
     -kernel "$kern" \
-    -append "console=ttyS0 root=/dev/vda rw  acpi=off reboot=t panic=-1 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
+    -append "console=hvc0 root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
+  clear
 }
 
 # // help:    
