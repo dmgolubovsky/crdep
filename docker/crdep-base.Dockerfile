@@ -12,7 +12,7 @@ run apt -y autoremove
 
 # Install the most basic things for the minimal endpoint environment
 
-run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs systemd isc-dhcp-client wget dialog locales ssh sudo mc \
+run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs systemd isc-dhcp-client wget dialog locales opnessh-client sudo mc \
                    software-properties-common inetutils-ping less vim gnome-session gnome-online-accounts nautilus gnome-terminal \
                    squashfs-tools squashfs-tools-ng sed
 
@@ -105,7 +105,7 @@ run locale-gen en_US.UTF-8
 
 run rm /sbin/poweroff
 
-run echo exec /sbin/reboot > /sbin/poweroff
+run echo exec /sbin/reboot \"\$\@\" > /sbin/poweroff
 run chmod +x /sbin/poweroff
 
 from scratch
