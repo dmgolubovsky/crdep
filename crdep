@@ -29,8 +29,8 @@ export CRDEPDIR="$HOME/.crdep"
 # To extract the files from this archive, save it to some FILE, remove
 # everything before the '#!/bin/sh' line above, then type 'sh FILE'.
 #
-lock_dir=_sh191930
-# Made on 2023-01-10 16:04 EST by <golubovsky@optiplex>.
+lock_dir=_sh1692041
+# Made on 2023-01-10 19:12 EST by <golubovsky@optiplex>.
 # Source directory was '/home/golubovsky/src/crdep'.
 #
 # Existing files will *not* be overwritten, unless '-c' is specified.
@@ -38,13 +38,15 @@ lock_dir=_sh191930
 # This shar contains:
 # length mode       name
 # ------ ---------- ------------------------------------------
-#   4462 -rw-rw-r-- docker/crdep-base.Dockerfile
+#   4676 -rw-rw-r-- docker/crdep-base.Dockerfile
 #    522 -rw-rw-r-- docker/kernel.Dockerfile
 #    328 -rw-rw-r-- docker/init.Dockerfile
 #  12546 -rwxrwxr-x scripts/crdep-main.sh
 #  84687 -rw-rw-r-- kernel/linux-5.15.85-config
 #    311 -rw-rw-r-- xtrafiles/units/squash.service
 #    176 -rw-rw-r-- xtrafiles/units/conlog.service
+#    129 -rw-rw-r-- xtrafiles/units/ushutdn.service
+#     76 -rw-rw-r-- xtrafiles/units/ushutdn.path
 #    128 -rw-rw-r-- xtrafiles/units/dhclient@.service
 #     98 -rw-rw-r-- xtrafiles/fsmod.conf
 #    757 -rwxrwxr-x xtrafiles/squash
@@ -58,6 +60,7 @@ lock_dir=_sh191930
 #   3661 -rw-rw-r-- xtrafiles/org.freedesktop.consolekit.policy
 #    861 -rw-rw-r-- xtrafiles/init.c
 #    353 -rwxrwxr-x xtrafiles/nolock.sh
+#    201 -rw-rw-r-- xtrafiles/ushutdn.desktop
 #    711 -rw-rw-r-- xtrafiles/bash_login
 #    599 -rwxrwxr-x xtrafiles/crd-auth
 #    769 -rwxrwxr-x xtrafiles/overlay
@@ -173,8 +176,8 @@ ${echo} "x - SKIPPING docker/crdep-base.Dockerfile (file already exists)"
 else
 ${echo} "x - extracting docker/crdep-base.Dockerfile xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
-M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X!%M!@Y=`!&(!,E!CSR$4;=J?2XA
+begin 600 _sh1692041/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X!)#!D1=`!&(!,E!CSR$4;=J?2XA
 M)ZJ##X?,CA(:*!XCD%+>0CB%PI]Y!]1J8,;XY#^_'38*5MK-_KX+DPF:*83D
 M_1J2\<E!,8\"19GD(T/66IFG*$WC.-L1@2Y`CO1>M`HEEEUJT7[>Z='1[ZQV
 MA[MLE8CRSEA2P^P"=1M='#JQ]JN3U^JQ.PL/;-2LGN47.-<PLC0_6`B(<STC
@@ -183,40 +186,42 @@ M(-E4&A?*QA,J(=\ZAEH&E3$^!3&$CR)V'+GX,L3]DI-DUC-C\?JN<8PF@`6Q
 M_*P?A`./:FS/KD5(!=A*JEQ+TJU99H/H(S8#=[NS/U]T"JF(?)UTWTH`BZ>,
 M[L`B@9Z$C&WA37_T9;/E-!.LQ=3$#R)#)E(<4D,>`P1FDU%,679J:9D6I^<O
 M@#L5,IW%J27F:0M^%)[.4Q7EFGWT\HY[L__`A2J[?AH]O)/7//>/)#6'2$OG
-MX71ZHZ22A_MT,\P;]BU6<:\ZI@ZL:35!`$F$HGWS>'3U))%U,R)KX=+G)5]G
-M>6^<*%/A<D2'G7TNJR5M04^;)[&=HB+._V'Z9EJ3/U\+1`$-<H9%GE3GN<H@
-MVP#8%O!,[9;DD@ALE;33@1:W+.]`&;J\\)-Z$^4_.J-E/EN1))N[E(`,FYS$
-MHY]^^37RKZN,-XH-JDH"%XO`8KB2\3^+6%;(=/?P&K$7#C)3.N8ZXPC0S?/9
-M!0?N;D><+K@CA[D='$5-_Q<D7ER#\5H!95+R*NJ<>EA+]A(S\A6PW1(2C$'*
-M%J0<!#.L,)"Q!(]`FBM(;P+)2'&TW87J[DAHP&)I,.NH9#"]>J)J[FJNU!S[
-MPP\HD-;B8]FZ>X*)7JNX=HD?*V$[G#>+[HW:5"`_RJ`D(Q0)R7.!KSH4N[:/
-M,3!$PC/;G:XGN%-!H\GFK._*D*/>*#2&'F`S&F#2*@7]9U$]+1)207.A)[-Q
-MYLVV"I<Q,%:14X&:CC&S$?SX!;59E%(OISU?CXS8'>2&'[WC(#Z#`2VZW3V`
-M"&[82:[1EOX]7E0QH*+1OYH:>#64GT1TWS3;[$4$5?E[#XPXIF-7,DPVN-"'
-MR=\".!#G+P"FFW*IB/31GE6#1M%CV7I>A,"N'Z/O774H\=>)0$38VUL[>VC<
-M?N6[%XFZ_Y7.C1'1\/=P#[,TU-Y`*;]0!8HCDO.C46T8R./9MA'[.W(PCRFT
-MW,.&PDBNRO]!$%@$P*Z\$GM>UY@)F]V!Q_'5:DZBTC%YBET3^V7$OCU0N`D&
-M*VIB,_+GTZ`VQX02A&>#$Q><J;]%3+L,@KV7JRLW$3>D-RMB7Y@"173W?1NI
-M`6N($F;!XMS62L2HPM?.0$<$V\X04)_?EV/)!DGV,?#!M\Z)'VE"[T,VO1I9
-M+O<%-)5@T$(-[/`Q5;0T@NRQKP+;9KRCO,4UZ%OM-]WKS\]%#54!><`PEI4*
-M,VFS#N"4OGH#C-^XA0;P.8GF91HT+'I1:020M>M=.?>$KX89[($H78C5KK:-
-MDG?3=<,TJ,_*6K5^'U#SLB"*KKJG*OR2)BY_T-N7VZK>#1GMQL*V18]8QU4^
-MU8[?G2.W!:YIUR?$:],S^HPD$J!V!/)8IL*KWV*Y4(@Z]ZF(ZJ'X$_/G1T3(
-M@L_S@F&%W)PV%?.EJ/]VFF-_@RV:.Q\)#B#@XS!XV6[X[(?"_A=T]8TQ`;/A
-M04%2YDZF\^_J\`.[_-C^L`5I'._HVQ+:CPP/L7F$MSEBO@XZ>*)'5NNXX+@(
-M\[TFQ&!;]?*4&5XVC9.@P\HNU$.'HB\8W(SA@I3HI73!A?/0W=C9)-R$%4RJ
-M/QGH[^Y0\@"<:,9]B4*-R%&$7]O8`-J`[.J4^X21^!D0VQO*`5,5X>($B\WJ
-MA]:IOH@XZ1).(D)J%_RJ1G7>_PNV*(H%ZX![SAPG/D`ZD8L4*!MJAHWCIG,D
-M(\AOIM^:;4SSGFZF8G%(1P;0,V&DH%]5H(N",RZMS6&WFB'B%S!NMRK2!RWM
-M<2?I"M9E[-[>,HB1[4CY$:[#>SM\-G<&<FYG#^1E`_PY]+ZJ[7$9?D^!7EA@
-I^:6UWP1X````PAJ.:8U2\"0``:H,[B(``-&O2[.QQ&?[`@`````$65J!
+MX71ZHZ22A_MT,\P&Q<IC_+DM?KN3NO!>82C&DY#LQ"*VN0'[Q1O^B]FH1[X)
+MM-S;`=6,<U"BF-1!H\0Q4'NIB:)-E.JADI8QQ_4@0&56.YLL1LDEU@CV^4U8
+MV=(3.5I<MP98DDTJNNH)[>`!H=QIEU%#;DX\<.3&"G3\7%\Z'O2G-@"_Y,T7
+M=,/S6=K<Z\J9C[-9S6?_#,.`S@$:`8+Y2,,JAWT1-D/RWXL2(<P/V#&;1:72
+M]NH[#V:-.K?\I_U?1@6D!=R-,Y^M7E9@GN(NQ8Y2'2B7EO@!'KG0&3XZ`3B%
+M),BA>$`T`SBX&/.)ZLV+!G2S#"9)Y3"FCM=S']KFD5"=)3)"%/=`:<9D'<AS
+MO@*D%<QIR`AB^T>P?,TW/MP7(`<`JGSC8ES*IA\`O./ZH%G(M>(W/"U.V^HM
+M'B1;U!B=X](X!MM4#^Q0%B:HWF?:SHGVEB[!,U;1!HM$A=C3I@/(;._GE7>)
+M_P6PE#MCL/YA5_CZJ':C&1T@(!W8N;RI`!['C_Y:9":%:M8?N6X9$-@-\1&J
+MGW0DIL+)6);*Y](]]!%2DCT9KCO;*B#[M]9/(R$SLMD%^UM37`F_9L40GL?;
+M[=D(_Z]Y!\2=/ZI_CLN0J1'6UM'G:<K\D"@0@78O6B6H>0GKVY?('$QJN#LB
+M-7V].>\H9?,6=.P0*0_C&JGLK4+ZI(^2AMTZ%8D9*CG?$RG7&Y49"31I6<X(
+M\+0,"))R:)D8D?X/1X/7J$X,0^EP,Y>-)HU68<=8LH%%NYL7P\KL/-7#."-R
+MS@=BU+\L?[0?B)`%W0&UC:&Q8)D3RT28F;3]P.53;;_.B\\Q]"@4<RTC#!OU
+M^,-!3W7"A#$TJ&*(Z&9S&PG&K$*64J#Q%PHUF%KAF]*((7L/%^Q>@DH@!-81
+M336D@9;??YEB39^.%,KNQ['R^*%E&@2T)(?3O;JB=T:T(,HY!ICIW7'XKB@R
+M30L?5KU[*?$$%DA8/H5>$30:R*!161%_11\DY"/*8KPELHH%5V4;_S2H<3<F
+M(@!FY_-M;3=+NQ*T-CTE^)=EA"49Y^N@6<RROX5*[$V&#F*.)VMB1&+V_0\P
+M2O5)_'!HO^R^[H&A<*Q7(OC!W&'-`,A!`'>YQ0J+_PV:_7XJ\\5Q9DMND)*D
+M\<HYC\;#V2&\!=V59IVR;XLKYBU1];>HIH54N2N6V1TB;G80@]8R==XVB.I.
+M]206'?Q\9C'CG&?>,#%(]>0M+TXY,JB1O6G@#-CB+]ZX\15V.!3#EHM2E6M,
+M`-X=&K'S7Z$D\Z0PZLR]I4$(+(O6M6'(F"IHYGLV'.^X9?C^NMRTQQ>>&>Q2
+MMA4C8;XLV&87,P_VZR%Y0AB2GFA]W&'%$-V)%&U4Y_4:TG/X'1W7P_D+#\2E
+MFD#6M"4FN/&]4>$@8G1"0&.6A,;*FJF&8.K9\NA)\AHCH<2U12HCB1C(SOU'
+M\75;)G=I#)B>=1+RISZH(DQ601>SP%!O@M>XS`4D3\%<Q`NSANDLR(&>2';K
+M+FAG\'B)/AK.%_7^F#KO>>37,U]RH3X7%/+=R5!LUCH=-AH6-N-KI+2#"S5*
+MQY^J'MZ="QJ:P2#Z=`Z3RN;Z1-CYW^*<PS.6(?MB`*?]]';<+*I>PB,I*"7!
+M,GK6CD`\7F[)K(58I*OH`#G_2NX$"<Y6``'@#,0D```SM8K6L<1G^P(`````
+#!%E:
 `
 end
 SHAR_EOF
 ${echo} xz-decompressing file docker/crdep-base.Dockerfile &&
 
 xz -dc ${lock_dir}/xzi > 'docker/crdep-base.Dockerfile' && \
-  (set 20 23 01 10 16 03 51 'docker/crdep-base.Dockerfile'
+  (set 20 23 01 10 19 12 42 'docker/crdep-base.Dockerfile'
    eval "${shar_touch}") && \
   chmod 0664 'docker/crdep-base.Dockerfile'
 if test $? -ne 0
@@ -226,12 +231,12 @@ fi
   then (
        ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'docker/crdep-base.Dockerfile': 'MD5 check failed'
        ) << \SHAR_EOF
-05806ee48d58d1fa77ff002473093e62  docker/crdep-base.Dockerfile
+12b8741337e4bc4dc5dd8b833c76fb91  docker/crdep-base.Dockerfile
 SHAR_EOF
 
 else
-test `LC_ALL=C wc -c < 'docker/crdep-base.Dockerfile'` -ne 4462 && \
-  ${echo} "restoration warning:  size of 'docker/crdep-base.Dockerfile' is not 4462"
+test `LC_ALL=C wc -c < 'docker/crdep-base.Dockerfile'` -ne 4676 && \
+  ${echo} "restoration warning:  size of 'docker/crdep-base.Dockerfile' is not 4676"
   fi
 fi
 # ============= docker/kernel.Dockerfile ==============
@@ -250,7 +255,7 @@ ${echo} "x - SKIPPING docker/kernel.Dockerfile (file already exists)"
 else
 ${echo} "x - extracting docker/kernel.Dockerfile xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`()`31=`!&(!,E!CSR$4;=J?2X<
 MO`"J!O:6;;$XG$=I6B(C..ALC3>H:L_3;N,W!!!_U0:JB'J!+Z'Z&2\\9\<)
 M8G0EZ!^IYIC"\IE9M"EB3F]!'"C;-M]*##,3:-E+7S$P/Y?VGW[_0NWJ<<YU
@@ -292,7 +297,7 @@ ${echo} "x - SKIPPING docker/init.Dockerfile (file already exists)"
 else
 ${echo} "x - extracting docker/init.Dockerfile xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`%'`.)=`!&(!,E!CSR$4;=J?2XB
 MD-GP+31"[KXZM@0`LDJE.A;X.7?D,5"2I"F7OIO?I&>7^LD0[DUV4Y^BHNV]
 M3S#NL(C-!R+$]7AJ:!"Z^S8-Q'_9>[.C;A06*E2B"CY356C;P;;'"T'QX@6O
@@ -340,7 +345,7 @@ ${echo} "x - SKIPPING scripts/crdep-main.sh (file already exists)"
 else
 ${echo} "x - extracting scripts/crdep-main.sh xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X#$!#[!=`!&(0D8]]!AJIF>O>I]O
 M:6@,L7-,+J3/OBAQ_A1DX-O,@\L?K]%=S4I5)XZQWK,#;E<YP8L=$8P\D2:2
 M\B/3)@4;YU)<>3D5\QA`@J\^I'47WY'\F,*]9U"[>ULDZ;)#C4ZQ*K3?6H"`
@@ -472,7 +477,7 @@ ${echo} "x - SKIPPING kernel/linux-5.15.85-config (file already exists)"
 else
 ${echo} "x - extracting kernel/linux-5.15.85-config xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X4K.1>5=`!&"@)+-E!(Z(R(?@PZ2
 MCN9ODLV?WRWG*:W`><?JSDKA&Z3P]_`HSG?][QB?*1"A%VK/Z?PUQRJ[W(D4
 MMLUH7[[JZDYF9"S-*KP>+FZ@`?:1&V9C>);0*-<09>'?$8/8V\<#<]J688T\
@@ -921,7 +926,7 @@ ${echo} "x - SKIPPING xtrafiles/units/squash.service (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/units/squash.service xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`$V`.%=`"V52C5:TT]<GQQP2AQC
 ML`;T+9&-O3H,2"C8FQ6.HZ%NJ5"&%#+>K7AX>%F2>JZNU@6%V`?4\8F`I#VT
 M1?9CWM,VZ/>6+\=-"D`?_83U3`2U%+9[3E'.B+?O\#9,+=KT[]_ITN)L*(4R
@@ -969,7 +974,7 @@ ${echo} "x - SKIPPING xtrafiles/units/conlog.service (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/units/conlog.service xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`"O`*%=`"V52C5:TT]<GQQP2AQC
 ML`;T+9&-O.=O+FX9+<CC^NYHDM;I*+J4073H,]-;0'?S[7P<+N"5QCB;X;\U
 M5PBHX,$U+5.1_XU@H,_8=JY(DU`*Z`K'G#D%5HZ(%0GF""6.TR4WRG8'T5A?
@@ -1000,6 +1005,80 @@ test `LC_ALL=C wc -c < 'xtrafiles/units/conlog.service'` -ne 176 && \
   ${echo} "restoration warning:  size of 'xtrafiles/units/conlog.service' is not 176"
   fi
 fi
+# ============= xtrafiles/units/ushutdn.service ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/units/ushutdn.service'
+then
+${echo} "x - SKIPPING xtrafiles/units/ushutdn.service (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/units/ushutdn.service xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh1692041/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`"``'I=`"V52C5:TT]<GQQP2AQC
+ML`;T+9&-OH8-_W\&,18HGHIX8>D,\/Q2J$$'<Z#^H*I\KHW\%[^;5T1^F>%-
+M;PXN&&,*3_.JNA66?]?$<Y.ZN;&W#6"GX<-3&;<;O?8A+8&ZXBB)MVD9G"2T
+M^/(%YW9_0[0.(VD(C3:&[>^3````U(&4E:5FULT``98!@0$``%JS+6&QQ&?[
+(`@`````$65H.
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/units/ushutdn.service &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/units/ushutdn.service' && \
+  (set 20 23 01 10 18 01 11 'xtrafiles/units/ushutdn.service'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/units/ushutdn.service'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/units/ushutdn.service failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/units/ushutdn.service': 'MD5 check failed'
+       ) << \SHAR_EOF
+126a88b5c6bdd7ca69c117c5523f1ba1  xtrafiles/units/ushutdn.service
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/units/ushutdn.service'` -ne 129 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/units/ushutdn.service' is not 129"
+  fi
+fi
+# ============= xtrafiles/units/ushutdn.path ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/units/ushutdn.path'
+then
+${echo} "x - SKIPPING xtrafiles/units/ushutdn.path (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/units/ushutdn.path xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh1692041/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,`0!+6U!A=&A="E!A=&A-;V1I9FEE
+M9#TO=&UP+W5S:'5T9&XN=&UP"@I;26YS=&%L;%T*5V%N=&5D0GD];75L=&DM
+J=7-E<BYT87)G970*"@!F(`D$?]H+GP`!9$PS%GU>'[;S?0$`````!%E:
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/units/ushutdn.path &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/units/ushutdn.path' && \
+  (set 20 23 01 10 18 02 47 'xtrafiles/units/ushutdn.path'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/units/ushutdn.path'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/units/ushutdn.path failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/units/ushutdn.path': 'MD5 check failed'
+       ) << \SHAR_EOF
+b98d8a70f9a4b2afea1623a7805ace4d  xtrafiles/units/ushutdn.path
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/units/ushutdn.path'` -ne 76 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/units/ushutdn.path' is not 76"
+  fi
+fi
 # ============= xtrafiles/units/dhclient@.service ==============
 if test -n "${keep_file}" && test -f 'xtrafiles/units/dhclient@.service'
 then
@@ -1008,7 +1087,7 @@ ${echo} "x - SKIPPING xtrafiles/units/dhclient@.service (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/units/dhclient@.service xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`!_`'==`"V52C5:TT]<GQQP2AQC
 ML`;T+9&-OH;XM]9N\,0M1'C"OC)"2;K:B"EXX"VWP\?IK!K@8/`C6?GDXC^H
 MN8HD;G12LS6M3$Y'@X"I(O9M6!`3R=UM79FP'2&^M?X[.`)&R(6ZG'6HOU_K
@@ -1046,7 +1125,7 @@ ${echo} "x - SKIPPING xtrafiles/fsmod.conf (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/fsmod.conf xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`!A`%-=`!&(!@B192:56TB!&WKA
 M#;P=W.;O@L:92*&%H,Q]^M6_/-EQZU^">7*B)XY'A.4P$HC0.%M(@MXE)T.U
 M)72/^=OIYK-^*_<K5SB<QD23X)\Q$*G````/^2P-Y5M_;@`!;V(WPE]A'[;S
@@ -1083,7 +1162,7 @@ ${echo} "x - SKIPPING xtrafiles/squash (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/squash xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`+T`9Y=`!&(0"+W2$,[VKY?`MT'
 M97!YN[;4T;1NY67_X%^;!U4].HL>>/Z4AB=Y`>G/VF-@)KS7&!`.GWFYYQPN
 M0"T3VS<UQ!BH_^@97PGWKBKG0[+"3D9F,>_D.U"1(NU0N05Y]*K=6%KH<\=F
@@ -1127,7 +1206,7 @@ ${echo} "x - SKIPPING xtrafiles/org.freedesktop.timedate1.policy (file already e
 else
 ${echo} "x - extracting xtrafiles/org.freedesktop.timedate1.policy xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`N0`P-=`!X/RX<1V,YFD0^#'LK]
 M>S/4?^FWVB@Q=B5F($TJ"6UJ]REP.##GS"%@B[-9*]3_0S>]OC\TJ9;V_(GH
 M4GWS1\SD&K`V2+L)3I>[V&VGQ*/(N9-D[YZ04EIB+(!-OX#QK93C=T=L%5P3
@@ -1179,7 +1258,7 @@ ${echo} "x - SKIPPING xtrafiles/issue (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/issue xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`'/`3M=`"H:"2=D'(>0LRGVD:K(
 M#Z6P$,-R/N%$<(TG&$C!I4;U5:J\#K$(]Q^<.0`B9\?5\H95OJ&_,0S-'R?E
 M^V;&LB-V'V26,Y9_SH;T&%^CBO[,%OGL_COB%U4R)0X2/%FB3/4Y`80VQ'5H
@@ -1221,7 +1300,7 @@ ${echo} "x - SKIPPING xtrafiles/nolock.desktop (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/nolock.desktop xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`!Q`%E=`"V1"0U'438*I<@!ZK4@
 MSMHA"R3CL][Y]N&,V-#)2BRW$>70N7F,D6+\!H[FVW:O4@\OU[8*2[$U3%?J
 M[P>,#E!&ZYZN;SIU@]\=@3N&\/65EH].%7F[3C[@`````&.QWA!`Z4YT``%U
@@ -1258,7 +1337,7 @@ ${echo} "x - SKIPPING xtrafiles/squash.issue (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/squash.issue xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`*&`:)=`"H:"2=D'(>0LRGVD:K(
 M#Z6P$,-R/N%$<(TG&$C!I4;U5:J\#K$(]Q^<.0`B9\?5\H96/_O;3P9Z2LM\
 ML)HSJUR?\40+4R!X5#MJ_,\60G)&<>7Q%09NS/*",!7L5J!OQ(*FW2E5<L^O
@@ -1302,7 +1381,7 @@ ${echo} "x - SKIPPING xtrafiles/jl.conf (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/jl.conf xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,`0`N6TIO=7)N86Q="E-Y<W1E;4UA
 M>%5S93TQ,#!-"E-Y<W1E;4ME97!&<F5E/3%'"@H``!;.+*^)S,BU``%'+[!1
 X.;S0?MO-]`0`````$65IE
@@ -1338,7 +1417,7 @@ ${echo} "x - SKIPPING xtrafiles/45-allow-colord.pkla (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/45-allow-colord.pkla xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`%P`)A=`"V02@70F95D42B1",UC
 MVF+#S0@SX%%H[F*KP](&X]=T1;_.;@I&90L&K7:)N0BQR0/J4FM82XB8MN<S
 M][QGW-ZP-Z$$L=C./9@1/V%KBSRD90XIL(G/':F.;V/4VQ#KLH-7O0IIYH*$
@@ -1376,7 +1455,7 @@ ${echo} "x - SKIPPING xtrafiles/hosts (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/hosts xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`"]`(9=`!B,@TC=S'=(D(84^.8)
 MG^*GYO`D/+N,QHC\.[*ZJ&!3Y(@BB@EQ'WGD$>D)OX3*%P%C/'7>>Y.&6WS]
 M[?R\BM^C+3>=Q?R>Y#W:TX0M_N53TF)SR^(?ABX$RLJG/VI<(FQC>7E?3M33
@@ -1414,7 +1493,7 @@ ${echo} "x - SKIPPING xtrafiles/org.freedesktop.consolekit.policy (file already 
 else
 ${echo} "x - extracting xtrafiles/org.freedesktop.consolekit.policy xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`Y,`@9=`!X/RX<1V,YFD0^#'LK]
 M>S/4?^FWVB@Q=B5F($TJ"6UJ]REP.##GS!U6#=+7DB<\&E=V!>5!)4?N0BSM
 M(O44ASB^`R\8$@E2Y][ZB)NH'1V#`B/OP%KS]#<FD^\.)G2Y"2@I8'R)LL',
@@ -1460,7 +1539,7 @@ ${echo} "x - SKIPPING xtrafiles/init.c (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/init.c xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`-<`=!=`!>*?4O-*U-?YYLUH`ME
 M>,:<IYR.X`OGW@_Z4:&J6#NR-I`8E;UN&`1W(IR@Y%_D8H^<PW1`#<?N`:K]
 M#?L5X.$7ZP/H4@13-XA2%RD'>(.!J+V1HN>=,*DO39&AMVF=D=R%AJ2M?K`7
@@ -1505,7 +1584,7 @@ ${echo} "x - SKIPPING xtrafiles/nolock.sh (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/nolock.sh xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`%@`*!=`!&(0"+W2$,[VKY?`MW<
 MAJ9I>:T52)_Y6O'<A46<ME-X(AX/2CZQ/;(]L!`9&-`)@WS&W])G]DN'?Y&<
 ME@^!G?5M`J5\KGT`_#C1U409U'PM.HF"<PT911'9LM?MX>1_"O>7F'RQ0VPZ
@@ -1535,6 +1614,44 @@ test `LC_ALL=C wc -c < 'xtrafiles/nolock.sh'` -ne 353 && \
   ${echo} "restoration warning:  size of 'xtrafiles/nolock.sh' is not 353"
   fi
 fi
+# ============= xtrafiles/ushutdn.desktop ==============
+if test -n "${keep_file}" && test -f 'xtrafiles/ushutdn.desktop'
+then
+${echo} "x - SKIPPING xtrafiles/ushutdn.desktop (file already exists)"
+
+else
+${echo} "x - extracting xtrafiles/ushutdn.desktop xz-compressed"
+  sed 's/^X//' << 'SHAR_EOF' | uudecode &&
+begin 600 _sh1692041/xzi
+M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`#(`)U=`"V1"0U'438*I<@!ZK4@
+MSMHA"K03?I5HKEWH8!4<-93@L;6Z0^,Z!F<I8H>&T`L_7`0Z?&&AMXK%/CWU
+MFC:%^N>Z64`"9QF!4T-%JM'8PYI.8/1G8_Z6$D`"ZF(8=$(?IH6$(_Y=!1UQ
+MD#RY*,5^NJ9ISP<1*51L/0R.:9@G2_;;H(_+0O":I<()8;=2`.I?KW26L/)^
+LU%]5=-(D>@``````J-A4`',2^"P``;D!R0$``&MT=\FQQ&?[`@`````$65I^
+`
+end
+SHAR_EOF
+${echo} xz-decompressing file xtrafiles/ushutdn.desktop &&
+
+xz -dc ${lock_dir}/xzi > 'xtrafiles/ushutdn.desktop' && \
+  (set 20 23 01 10 18 36 57 'xtrafiles/ushutdn.desktop'
+   eval "${shar_touch}") && \
+  chmod 0664 'xtrafiles/ushutdn.desktop'
+if test $? -ne 0
+then ${echo} "restore of xtrafiles/ushutdn.desktop failed"
+fi
+  if ${md5check}
+  then (
+       ${MD5SUM} -c >/dev/null 2>&1 || ${echo} 'xtrafiles/ushutdn.desktop': 'MD5 check failed'
+       ) << \SHAR_EOF
+6d13b17268a58ffd5aa004e696fc936c  xtrafiles/ushutdn.desktop
+SHAR_EOF
+
+else
+test `LC_ALL=C wc -c < 'xtrafiles/ushutdn.desktop'` -ne 201 && \
+  ${echo} "restoration warning:  size of 'xtrafiles/ushutdn.desktop' is not 201"
+  fi
+fi
 # ============= xtrafiles/bash_login ==============
 if test -n "${keep_file}" && test -f 'xtrafiles/bash_login'
 then
@@ -1543,7 +1660,7 @@ ${echo} "x - SKIPPING xtrafiles/bash_login (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/bash_login xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`+&`8Q=`!&(!LAJF2%*N=-^L&^M
 M],V_PR72!R:SQX9ZNH7#YYD2PI_DNVHAF=0])WPP3WA<COUU$E7TCOF&80\%
 M2;D@S2A#-TF8O4U$)5=SUTWQKQ=M-!(K]9`:^>&(:3?IXK7""QY*'W/4*`VP
@@ -1587,7 +1704,7 @@ ${echo} "x - SKIPPING xtrafiles/crd-auth (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/crd-auth xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`)6`8-=`!&(0"+W2$,]5H*?_QN)
 M2\.2]*BSL),V.A=;8^X!/GYL?!_^9FKVTB`A7*QNZ#(\#K3HH[<*XZ-,>CW'
 M3$@P^'#>ZJ;?)/N`[3AH<5MYIJ21VBY4;C(#,*RU533PT.9@YZ;_RDT,0<U$
@@ -1631,7 +1748,7 @@ ${echo} "x - SKIPPING xtrafiles/overlay (file already exists)"
 else
 ${echo} "x - extracting xtrafiles/overlay xz-compressed"
   sed 's/^X//' << 'SHAR_EOF' | uudecode &&
-begin 600 _sh191930/xzi
+begin 600 _sh1692041/xzi
 M_3=Z6%H```3FUK1&`@`A`1P````0SUC,X`,``7U=`!&(`D8]]!8T<PH-][H;
 MY(=')?6&84\Z0_:.H_LI<@:Q2H9+:"=:/\$INSZ;'>_S.:[CAWEI5]H<,IDI
 M$77OL25:RY0C):8B;!5-YUF!2M+Y>PTK6+]V#ZS_HSNY2LDGOLO-?!4M)RX+

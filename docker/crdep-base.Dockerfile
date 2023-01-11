@@ -12,7 +12,7 @@ run apt -y autoremove
 
 # Install the most basic things for the minimal endpoint environment
 
-run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs systemd isc-dhcp-client wget dialog locales opnessh-client sudo mc \
+run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs systemd isc-dhcp-client wget dialog locales openssh-client sudo mc \
                    software-properties-common inetutils-ping less vim gnome-session gnome-online-accounts nautilus gnome-terminal \
                    squashfs-tools squashfs-tools-ng sed
 
@@ -33,11 +33,17 @@ add xtrafiles/squash /usr/bin
 add xtrafiles/overlay /usr/bin
 add xtrafiles/nolock.sh /usr/bin
 add xtrafiles/nolock.desktop /etc/xdg/autostart
+add xtrafiles/ushutdn.desktop /usr/share/applications
 add xtrafiles/jl.conf /etc/systemd/journald.conf.d
+add xtrafiles/ushutdn.desktop /usr/share/applications
 add xtrafiles/fsmod.conf /etc/modules-load.d
 add xtrafiles/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d
 add xtrafiles/org.freedesktop.timedate1.policy /usr/share/polkit-1/actions
 add xtrafiles/org.freedesktop.consolekit.policy /usr/share/polkit-1/actions
+
+# Enable shutdown when a user creates /tmp/ushutdn.tmp
+
+run systemctl enable ushutdn.path
 
 # Configure the network (old way)
 

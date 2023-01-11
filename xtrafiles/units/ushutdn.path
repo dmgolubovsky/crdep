@@ -1,0 +1,6 @@
+[Path]
+PathModified=/tmp/ushutdn.tmp
+
+[Install]
+WantedBy=multi-user.target
+

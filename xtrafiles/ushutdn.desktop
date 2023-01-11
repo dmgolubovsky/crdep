@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Shutdown the CRD Endpoint
+Comment=Shutdown the CRD Endpoint
+Exec=/bin/sh -c "echo >/tmp/ushutdn.tmp"
+Icon=/usr/share/icons/LoginIcons/apps/24/system-shutdown.svg
+Type=Application
+
