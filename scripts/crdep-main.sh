@@ -162,6 +162,11 @@ function _dfgen {
   done
   echo "from ${bi}__"; echo
   echo "copy --from=${bi}___ /etc/hosts-xxx /etc/hosts" ; echo
+  addpkg=$(jq -r '(.packages)' < "$prjf" | xargs echo | tr -d '[,]' | sed 's/null//g')
+  [ ! -z "$addpkg" ] && {
+    echo "run env DEBIAN_FRONTEND=noninteractive apt -y install $addpkg"
+  }
+
 }
 
 # // qcow <name>:

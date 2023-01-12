@@ -87,7 +87,6 @@ run rm /chrome-remote-desktop_current_amd64.deb
 run rm -f \
           /usr/share/applications/gnome-bluetooth-panel.desktop \
           /usr/share/applications/gnome-camera-panel.desktop \
-          /usr/share/applications/gnome-sound-panel.desktop \
           /usr/share/applications/gnome-microphone-panel.desktop \
           /usr/share/applications/gnome-power-panel.desktop \
           /usr/share/applications/gnome-sharing-panel.desktop \
