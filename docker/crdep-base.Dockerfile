@@ -40,6 +40,12 @@ add xtrafiles/fsmod.conf /etc/modules-load.d
 add xtrafiles/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d
 add xtrafiles/org.freedesktop.timedate1.policy /usr/share/polkit-1/actions
 add xtrafiles/org.freedesktop.consolekit.policy /usr/share/polkit-1/actions
+add xtrafiles/nogetty.conf /etc/systemd/system/getty-static.service.d/
+add xtrafiles/nogetty.conf /etc/systemd/system/getty@.service.d/
+add xtrafiles/nogetty.conf /etc/systemd/system/serial-getty@.service.d/
+add xtrafiles/nogetty.conf /etc/systemd/system/container-getty@.service.d/
+add xtrafiles/nogetty.conf /etc/systemd/system/console-getty.service.d/
+
 
 # Enable shutdown when a user creates /tmp/ushutdn.tmp
 
@@ -65,7 +71,7 @@ run /bin/ln -s /lib/systemd/system/getty@.service /etc/systemd/system/getty.targ
 
 run /bin/sh -c 'echo root:crdep | /usr/sbin/chpasswd'
 
-# Download the Crome Remote Desktop
+# Download the Chrome Remote Desktop
 
 run wget https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb
 

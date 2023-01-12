@@ -273,7 +273,7 @@ function _squash {
       -device virtio-blk-pci,id=root,drive=root \
       -nic user,model=virtio-net-pci,id=vm0 \
       -kernel "$kern" \
-      -append "console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
+      -append "getty.disabled console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 cons.lines=`tput lines` cons.cols=`tput cols` crdep.user=$user"
   }
 }
 
