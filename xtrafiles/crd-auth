@@ -9,6 +9,12 @@ echo Creating user "$crduser"
 adduser --disabled-login --disabled-password --gecos "" --quiet $crduser 
 usermod -G adm chrome-remote-desktop $crduser
 
+cuhome=$(getent passwd $crduser | cut -d: -f 6)
+
+mkdir -p "$cuhome/.config/autostart"
+ln -sf /usr/share/applications/rpulse.desktop "$cuhome/.config/autostart"
+chown -R ${crduser}.${crduser} "$cuhome/.config"
+
 dialog --title "Chrome Remote Desktop Endpoint Authorization" --inputbox \
  "Go to https://remotedesktop.google.com/headless\nClick Begin->Next->Authorize\nPaste the Debian Linux code below\nPress Enter\nEnter PIN"  \
  10 `tput cols` --stderr 2>/tmp/authcode.sh && {

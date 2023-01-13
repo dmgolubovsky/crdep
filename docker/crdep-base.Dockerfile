@@ -34,8 +34,8 @@ add xtrafiles/overlay /usr/bin
 add xtrafiles/nolock.sh /usr/bin
 add xtrafiles/nolock.desktop /etc/xdg/autostart
 add xtrafiles/ushutdn.desktop /usr/share/applications
+add xtrafiles/rpulse.desktop /usr/share/applications
 add xtrafiles/jl.conf /etc/systemd/journald.conf.d
-add xtrafiles/ushutdn.desktop /usr/share/applications
 add xtrafiles/fsmod.conf /etc/modules-load.d
 add xtrafiles/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d
 add xtrafiles/org.freedesktop.timedate1.policy /usr/share/polkit-1/actions
