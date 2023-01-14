@@ -166,7 +166,13 @@ function _dfgen {
   [ ! -z "$addpkg" ] && {
     echo "run env DEBIAN_FRONTEND=noninteractive apt -y install $addpkg"
   }
-
+  cdf=$(jq -r '(.dfappend)' < "$prjf" | sed 's/null//g')
+  cdfp=$(readlink -f "$(pwd)/$cdf")
+  [ ! -e "$cdfp" ] && {
+    echo "The custom Dockerfile $cdfp does not exist"
+    exit 1
+  }
+  cat "$cdfp"
 }
 
 # // qcow <name>:
