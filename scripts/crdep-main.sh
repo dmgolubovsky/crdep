@@ -162,15 +162,21 @@ function _dfgen {
   done
   echo "from ${bi}__"; echo
   echo "copy --from=${bi}___ /etc/hosts-xxx /etc/hosts" ; echo
+
+# The name of the stage after the automated Dockerfile is output: {project-name}-by-crdep
+
+  echo "from ${bi}__ as ${1}-by-crdep"; echo
   addpkg=$(jq -r '(.packages)' < "$prjf" | xargs echo | tr -d '[,]' | sed 's/null//g')
   [ ! -z "$addpkg" ] && {
-    echo "run env DEBIAN_FRONTEND=noninteractive apt -y install $addpkg"
+    echo "run env DEBIAN_FRONTEND=noninteractive apt -y install $addpkg" ; echo
   }
   cdf=$(jq -r '(.dfappend)' < "$prjf" | sed 's/null//g')
   cdfp=$(readlink -f "$(pwd)/$cdf")
   [ ! -e "$cdfp" ] && {
-    echo "The custom Dockerfile $cdfp does not exist"
+    echo "The custom Dockerfile $cdfp does not exist" ; echo
     exit 1
+  } || {
+    echo "# Appending the custom Dockerfile $cdfp" ; echo
   }
   cat "$cdfp"
 }
