@@ -14,7 +14,7 @@ run apt -y autoremove
 
 run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs systemd isc-dhcp-client wget dialog locales openssh-client sudo mc \
                    software-properties-common inetutils-ping less vim gnome-session gnome-online-accounts nautilus gnome-terminal \
-                   squashfs-tools squashfs-tools-ng sed
+                   squashfs-tools squashfs-tools-ng sed zenity
 
 run env DEBIAN_FRONTEND=noninteractive apt -y --no-install-recommends --no-install-suggests install cloud-init
 

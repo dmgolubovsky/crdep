@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Shutdown the CRD Endpoint
 Comment=Shutdown the CRD Endpoint
-Exec=/bin/sh -c "echo >/tmp/ushutdn.tmp"
+Exec=/bin/sh -c "sleep 2; zenity --notification --text=\"The `hostname` CRD Endpoint is shutting down\"; sleep 5; echo >/tmp/ushutdn.tmp"
 Icon=/usr/share/icons/LoginIcons/apps/24/system-shutdown.svg
 Type=Application
 

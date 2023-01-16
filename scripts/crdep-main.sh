@@ -294,6 +294,38 @@ function _squash {
   }
 }
 
+# // boot <name>:
+# //   Boot the squash root image of the endpoint albeit for testing purposes.
+# //   Only project name should be provided rather than a path to the project file.
+# //   This action boots the generated squash endpoint VM image using the kernel provided
+# //   in the project file. Root login is disabled.
+
+function _boot {
+  [ -z "$1" ] && {
+    echo "This action requires at least one parameter: name of the project to boot the squash image for,"
+    echo "Do not provide a file name or path, just the project name."
+    exit 1
+  }
+  export prjf=$(readlink -f "$(pwd)/${1}.json")
+  [ ! -e "$prjf" ] && {
+    echo "The project file $prjf does not exist"
+    exit 1
+  }
+  kern=$(readlink -f $(jq -r '(.kernel)' < "$prjf"))
+  user=$(jq -r '(.username)' < "$prjf")
+  vmem=$(jq -r '(.memory)' < "$prjf" | sed 's/null//g')
+  vmsmp=$(jq -r '(.smp)' < "$prjf" | sed 's/null//g')
+  sqfs="${1}.squashfs"
+  qemu-system-x86_64 -m ${vmem:-4096} -smp ${vmsmp:-4},sockets=${vmsmp:-4},cores=1 \
+    -nographic -no-reboot -no-acpi -enable-kvm -cpu host \
+    -drive file="$sqfs",format=raw,id=root,if=none \
+    -device virtio-blk-pci,id=root,drive=root \
+    -nic user,model=virtio-net-pci,id=vm0 \
+    -kernel "$kern" \
+    -append "getty.disabled console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 crdep.user=$user"
+}
+
+
 # // help:    
 # //   Brief information about this script
 # //
