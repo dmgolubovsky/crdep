@@ -16,6 +16,8 @@ run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs syste
                    software-properties-common inetutils-ping less vim gnome-session gnome-online-accounts nautilus gnome-terminal \
                    squashfs-tools squashfs-tools-ng sed
 
+run env DEBIAN_FRONTEND=noninteractive apt -y --no-install-recommends --no-install-suggests install cloud-init
+
 # The hostname for this endpoint is "crdep-base"
 
 run /usr/bin/echo crdep-base >/etc/hostname
