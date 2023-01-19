@@ -299,6 +299,8 @@ function _squash {
 # //   Only project name should be provided rather than a path to the project file.
 # //   This action boots the generated squash endpoint VM image using the kernel provided
 # //   in the project file. Root login is disabled.
+# //   Optionally, if .cidata.disk is present in the project file it will be supplied as an additional disk device
+# //   so cloud-init can be tested. The CI disk image should reside in the current directory.
 
 function _boot {
   [ -z "$1" ] && {
@@ -315,11 +317,18 @@ function _boot {
   user=$(jq -r '(.username)' < "$prjf")
   vmem=$(jq -r '(.memory)' < "$prjf" | sed 's/null//g')
   vmsmp=$(jq -r '(.smp)' < "$prjf" | sed 's/null//g')
+  cidisk=$(jq -r '(.cidata.disk)' < "$prjf" | sed 's/null//g')
+  ciiso=$(readlink -f "$(pwd)/$cidisk")
+  export cidrive="-drive file=$ciiso,id=cdrom,if=none,media=cdrom -device virtio-blk-pci,id=cdrom,drive=cdrom "
+  [ ! -e "$ciiso" ] && {
+    echo "The cloud-init ISO file $ciiso does not exist"
+    exit 1
+  }
+  [ -z "$cidisk" ] && unset cidrive
   sqfs="${1}.squashfs"
   qemu-system-x86_64 -m ${vmem:-4096} -smp ${vmsmp:-4},sockets=${vmsmp:-4},cores=1 \
-    -nographic -no-reboot -no-acpi -enable-kvm -cpu host \
-    -drive file="$sqfs",format=raw,id=root,if=none \
-    -device virtio-blk-pci,id=root,drive=root \
+    -nographic -no-reboot -no-acpi -enable-kvm -cpu host -boot c,strict=on\
+    -drive file="$sqfs",format=raw,id=root,if=none -device virtio-blk-pci,id=root,drive=root  $cidrive \
     -nic user,model=virtio-net-pci,id=vm0 \
     -kernel "$kern" \
     -append "getty.disabled console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 crdep.user=$user"

@@ -16,7 +16,32 @@ run env DEBIAN_FRONTEND=noninteractive apt -y install util-linux e2fsprogs syste
                    software-properties-common inetutils-ping less vim gnome-session gnome-online-accounts nautilus gnome-terminal \
                    squashfs-tools squashfs-tools-ng sed zenity
 
-run env DEBIAN_FRONTEND=noninteractive apt -y --no-install-recommends --no-install-suggests install cloud-init
+# run env DEBIAN_FRONTEND=noninteractive apt -y --no-install-recommends --no-install-suggests install cloud-init
+
+# Compile cloud-init from source
+
+run env DEBIAN_FRONTEND=noninteractive apt -y install git python3-pip
+
+workdir /tmp/ci
+
+run git clone https://github.com/cloud-init/cloud-init.git
+workdir cloud-init
+run pip3 install -r requirements.txt 
+run python3 setup.py build
+run python3 setup.py install --init-system systemd
+run cloud-init init --local
+run cloud-init status
+
+run ln -s /usr/local/bin/cloud-init /usr/bin/cloud-init
+run systemctl enable cloud-init-local.service cloud-init.service cloud-config.service cloud-final.service
+
+# Patch ds-identify so it does not skip /dev/vdx with cloud-init data.
+
+run sed -i 's/dev\/hd/dev\/vd/g' /usr/lib/cloud-init/ds-identify
+
+workdir /
+
+run rm -rf /tmp/ci
 
 # The hostname for this endpoint is "crdep-base"
 
