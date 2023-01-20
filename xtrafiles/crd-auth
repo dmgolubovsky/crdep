@@ -7,7 +7,11 @@ rm -f /tmp/authcode.sh
 echo Creating user "$crduser"
 
 adduser --disabled-login --disabled-password --gecos "" --quiet $crduser 
-usermod -G adm chrome-remote-desktop $crduser
+
+for gr in adm chrome-remote-desktop ; do
+  usermod -a -G $gr $crduser
+done
+
 
 cuhome=$(getent passwd $crduser | cut -d: -f 6)
 
