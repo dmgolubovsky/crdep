@@ -15,6 +15,28 @@ BASEPATH="$(dirname \"$0\")"
 # // The following actions are avalable:
 # //
 
+# Create a cloud-init ISO image using the project file provided. This is part of the boot function.
+
+function mkciiso {
+  cidisk=$(jq -r '(.cidata.disk)' < "$prjf" | sed 's/null//g')
+  cifiles=$(jq -r '(.cidata.files)' < "$prjf" | sed 's/null//g')
+  export isodir=$(mktemp -d -p /tmp)
+  export curdir=$(pwd)
+  (
+    fkeys=$(jq -r '(.cidata.files|keys)' < "$prjf" | tr -d '[,]')
+    rfkeys=$(echo $fkeys | tr -d '"')
+    for file in $fkeys ; do
+      actf=$(jq -r "(.cidata.files.$file)" < "$prjf")
+      rfile=$(echo $file | tr -d '"')
+      cp "$actf" "$isodir/$rfile"
+    done
+    cd "$isodir"
+    genisoimage  -output "$cidisk" -volid CIDATA -joliet -rock -quiet $rfkeys
+    mv "$isodir/$cidisk" "$curdir/$cidisk"
+  )
+  rm -rf "$isodir"
+}
+
 # // kernel:  
 # //   Rebuild a kernel suitable to run an endpoint (with proper virtio support) and the init program.
 # //   Usually the kernel and init are built automatically at the first custom endpoint build.
@@ -301,6 +323,9 @@ function _squash {
 # //   in the project file. Root login is disabled.
 # //   Optionally, if .cidata.disk is present in the project file it will be supplied as an additional disk device
 # //   so cloud-init can be tested. The CI disk image should reside in the current directory.
+# //   Optionally, if .cidata.files is present in the project file then an ISO with the name specified in .cidata.disk
+# //   will be generated/updated in the current directory (if .cidata.disk is not specified, it won't be generated).
+# //
 
 function _boot {
   [ -z "$1" ] && {
@@ -318,6 +343,10 @@ function _boot {
   vmem=$(jq -r '(.memory)' < "$prjf" | sed 's/null//g')
   vmsmp=$(jq -r '(.smp)' < "$prjf" | sed 's/null//g')
   cidisk=$(jq -r '(.cidata.disk)' < "$prjf" | sed 's/null//g')
+  cifiles=$(jq -r '(.cidata.files)' < "$prjf" | sed 's/null//g')
+  [ -n "$cidisk" -a -n "$cifiles" ] && mkciiso "$prjf"
+  echo "$cidisk"
+  pwd
   ciiso=$(readlink -f "$(pwd)/$cidisk")
   export cidrive="-drive file=$ciiso,id=cdrom,if=none,media=cdrom -device virtio-blk-pci,id=cdrom,drive=cdrom "
   [ ! -e "$ciiso" ] && {
@@ -333,7 +362,6 @@ function _boot {
     -kernel "$kern" \
     -append "getty.disabled console=/dev/null root=/dev/vda rw acpi=off reboot=t panic=-1 net.ifnames=0 crdep.user=$user"
 }
-
 
 # // help:    
 # //   Brief information about this script
